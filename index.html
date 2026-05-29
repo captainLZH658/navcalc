@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>航海计算助手</title>
+<title>NavCalc - Navigation Calculator</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1F4E79">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -77,64 +81,64 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <div class="page-home" id="pageHome">
   <div class="home-header">
-    <div class="home-title">⚓ 航海计算</div>
+    <div class="home-title">⚓ Navigation Calculator</div>
     <div class="home-sub">Navigation Calculator</div>
   </div>
   <div class="menu-grid" id="homeGrid"></div>
 </div>
 
 <div class="tool-page" data-page="eta" id="pageEta">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">⏳</div><div class="header-title">ETA 计算器</div><div class="header-sub">Navigational ETA Calculator</div></div>
-  <div class="section input-section"><div class="section-title">📅 当前日期时间</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">⏳</div><div class="header-title">ETA Calculator</div><div class="header-sub">Estimated Time of Arrival</div></div>
+  <div class="section input-section"><div class="section-title">📅 Current Date & Time</div>
     <div class="row">
-      <div class="field"><div class="field-label">日期</div><div class="picker-input" id="e_d"></div></div>
-      <div class="field"><div class="field-label">时间</div><div class="picker-input" id="e_t"></div></div>
+      <div class="field"><div class="field-label">Date</div><div class="picker-input" id="e_d"></div></div>
+      <div class="field"><div class="field-label">Time</div><div class="picker-input" id="e_t"></div></div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">🌐 时区</div>
+  <div class="section input-section"><div class="section-title">🌐 Time Zone</div>
     <div class="row">
-      <div class="field"><div class="field-label">起始时区</div>
+      <div class="field"><div class="field-label">Depart UTC</div>
         <select class="num-input yellow" id="e_su">
           <option value="12">UTC+12</option><option value="11">UTC+11</option><option value="10">UTC+10</option><option value="9">UTC+9</option><option value="8">UTC+8</option><option value="7">UTC+7</option><option value="6">UTC+6</option><option value="5">UTC+5</option><option value="4">UTC+4</option><option value="3">UTC+3</option><option value="2">UTC+2</option><option value="1">UTC+1</option><option value="0">UTC+0</option><option value="-1">UTC-1</option><option value="-2">UTC-2</option><option value="-3">UTC-3</option><option value="-4">UTC-4</option><option value="-5">UTC-5</option><option value="-6">UTC-6</option><option value="-7">UTC-7</option><option value="-8">UTC-8</option><option value="-9">UTC-9</option><option value="-10">UTC-10</option><option value="-11">UTC-11</option><option value="-12">UTC-12</option>
         </select>
       </div>
-      <div class="field"><div class="field-label">目的时区</div>
+      <div class="field"><div class="field-label">Dest UTC</div>
         <select class="num-input yellow" id="e_du">
           <option value="12">UTC+12</option><option value="11">UTC+11</option><option value="10">UTC+10</option><option value="9">UTC+9</option><option value="8">UTC+8</option><option value="7">UTC+7</option><option value="6">UTC+6</option><option value="5">UTC+5</option><option value="4">UTC+4</option><option value="3">UTC+3</option><option value="2">UTC+2</option><option value="1">UTC+1</option><option value="0">UTC+0</option><option value="-1">UTC-1</option><option value="-2">UTC-2</option><option value="-3">UTC-3</option><option value="-4">UTC-4</option><option value="-5">UTC-5</option><option value="-6">UTC-6</option><option value="-7">UTC-7</option><option value="-8">UTC-8</option><option value="-9">UTC-9</option><option value="-10">UTC-10</option><option value="-11">UTC-11</option><option value="-12">UTC-12</option>
         </select>
       </div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">🛳️ 航程参数</div>
+  <div class="section input-section"><div class="section-title">🛳️ Passage Parameters</div>
     <div class="row">
-      <div class="field"><div class="field-label">航程距离 (NM)</div><input class="num-input yellow" id="e_dist" type="number" step="any" placeholder="海里"></div>
-      <div class="field"><div class="field-label">航速 (kn)</div><input class="num-input" id="e_spd" type="number" step="any" placeholder="节"></div>
+      <div class="field"><div class="field-label">Distance (NM)</div><input class="num-input yellow" id="e_dist" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><div class="field-label">Speed (kn)</div><input class="num-input" id="e_spd" type="number" step="any" placeholder="kn"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">航行时间</div><input class="num-input" id="e_td" type="text" placeholder="天/时/分自动计算" readonly></div>
-      <div class="field"><div class="field-label">抵达时间 (LT)</div><input class="num-input" id="e_tt" type="text" placeholder="DD HH:MM" readonly></div>
+      <div class="field"><div class="field-label">Transit Time</div><input class="num-input" id="e_td" type="text" placeholder="days/hrs/minsAuto" readonly></div>
+      <div class="field"><div class="field-label">Arrival Time (LT)</div><input class="num-input" id="e_tt" type="text" placeholder="DD HH:MM" readonly></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cETA()">📊 计算 ETA</button>
-  <div class="section result-section" id="etaResults" style="display:none"><div class="section-title">📋 计算结果</div>
+  <button class="calc-btn" onclick="cETA()">📊 CALCULATE ETA</button>
+  <div class="section result-section" id="etaResults" style="display:none"><div class="section-title">📋 Results</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">航行时间</span><span class="result-value" id="e_td2"></span></div>
+      <div class="result-row"><span class="result-label">Transit Time</span><span class="result-value" id="e_td2"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">抵达时间 (目的地LT)</span><span class="result-value highlight" id="e_eta2"></span></div>
+      <div class="result-row"><span class="result-label">Arrival Time (Dest LT)</span><span class="result-value highlight" id="e_eta2"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">抵达时间 (UTC)</span><span class="result-value" id="e_eta_utc"></span></div>
+      <div class="result-row"><span class="result-label">Arrival Time (UTC)</span><span class="result-value" id="e_eta_utc"></span></div>
     </div>
-    <div class="section-title" style="margin-top:12px">⏱️ 航速速查表</div>
+    <div class="section-title" style="margin-top:12px">⏱️ Speed Lookup Table</div>
     <table class="speed-table" id="e_tbl"></table>
   </div>
-  <button class="reset-btn" onclick="rETA()">↻ 重置</button>
+  <button class="reset-btn" onclick="rETA()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="night-orders" id="pageNight">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">📋</div><div class="header-title">Night Orders</div><div class="header-sub">Captain's Night Orders Generator</div></div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">📋</div><div class="header-title">Night Orders</div><div class="header-sub">Captain's Night Orders</div></div>
   <div class="section" style="border-left:4px solid #1F4E79">
     <div class="row" style="justify-content:space-between">
       <span class="field-label" id="no_date">📅 2026-05-29</span>
@@ -143,262 +147,262 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
   <div class="section" id="no_list"></div>
   <div class="actions">
-    <button class="calc-btn" onclick="genOrders()">🔄 换一批</button>
-    <button class="calc-btn" onclick="copyOrders()">📋 复制全部</button>
+    <button class="calc-btn" onclick="genOrders()">🔄 🔄 Refresh</button>
+    <button class="calc-btn" onclick="copyOrders()">📋 📋 Copy All</button>
   </div>
-  <button class="reset-btn" onclick="rNight()">↻ 重置</button>
+  <button class="reset-btn" onclick="rNight()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="true-wind" id="pageWind">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">🌬️</div><div class="header-title">真风计算</div><div class="header-sub">True Wind Calculator</div></div>
-  <div class="section input-section"><div class="section-title">🚢 船舶运动</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">🌬️</div><div class="header-title">True Wind</div><div class="header-sub">True Wind Calculator</div></div>
+  <div class="section input-section"><div class="section-title">🚢 Ship Motion</div>
     <div class="row">
       <div class="field"><div class="field-label">COG (°)</div><input class="num-input yellow" id="w_cog" type="number" step="any" placeholder="0-360"></div>
-      <div class="field"><div class="field-label">SOG (kn)</div><input class="num-input yellow" id="w_sog" type="number" step="any" placeholder="节"></div>
+      <div class="field"><div class="field-label">SOG (kn)</div><input class="num-input yellow" id="w_sog" type="number" step="any" placeholder="kn"></div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">🌊 视风 (Apparent Wind)</div>
+  <div class="section input-section"><div class="section-title">🌊 Apparent Wind (Apparent Wind)</div>
     <div class="row">
-      <div class="field"><div class="field-label">视风向 (°)</div><input class="num-input yellow" id="w_awa" type="number" step="any" placeholder="相对船首方向"></div>
-      <div class="field"><div class="field-label">视风速 (kn)</div><input class="num-input yellow" id="w_aws" type="number" step="any" placeholder="节"></div>
+      <div class="field"><div class="field-label">Rel. Wind Dir. (°)</div><input class="num-input yellow" id="w_awa" type="number" step="any" placeholder="Rel. to bow"></div>
+      <div class="field"><div class="field-label">AWS (kn)</div><input class="num-input yellow" id="w_aws" type="number" step="any" placeholder="kn"></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cWind()">🧮 计算真风</button>
-  <div class="section result-section" id="windResults" style="display:none"><div class="section-title">📊 真风结果</div>
+  <button class="calc-btn" onclick="cWind()">🧮 CALCULATE TRUE WIND</button>
+  <div class="section result-section" id="windResults" style="display:none"><div class="section-title">📊 True Wind Results</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">真风向 (TWD)</span><span class="result-value highlight" id="w_twd"></span></div>
+      <div class="result-row"><span class="result-label">TWD (TWD)</span><span class="result-value highlight" id="w_twd"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">真风速 (TWS)</span><span class="result-value" id="w_tws"></span></div>
+      <div class="result-row"><span class="result-label">TWS (TWS)</span><span class="result-value" id="w_tws"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">相对方向</span><span class="result-value" id="w_rel"></span></div>
+      <div class="result-row"><span class="result-label">Relative Dir.</span><span class="result-value" id="w_rel"></span></div>
     </div>
   </div>
-  <button class="reset-btn" onclick="rWind()">↻ 重置</button>
+  <button class="reset-btn" onclick="rWind()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="density-draft" id="pageDensity">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">🌊</div><div class="header-title">吃水密度修正</div><div class="header-sub">Density & Draft Correction</div></div>
-  <div class="section input-section"><div class="section-title">📏 当前状态</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">🌊</div><div class="header-title">Density Draft Correction</div><div class="header-sub">Density & Draft Correction</div></div>
+  <div class="section input-section"><div class="section-title">📏 Status</div>
     <div class="row">
-      <div class="field"><div class="field-label">当前水密度 (t/m³)</div><input class="num-input yellow" id="d_d1" type="number" step="any" value="1.025"></div>
-      <div class="field"><div class="field-label">目标水密度 (t/m³)</div><input class="num-input yellow" id="d_d2" type="number" step="any" placeholder="输入目标密度"></div>
+      <div class="field"><div class="field-label">Current ρ (t/m³)</div><input class="num-input yellow" id="d_d1" type="number" step="any" value="1.025"></div>
+      <div class="field"><div class="field-label">Target ρ (t/m³)</div><input class="num-input yellow" id="d_d2" type="number" step="any" placeholder="Enter target density"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">当前平均吃水 (m)</div><input class="num-input yellow" id="d_t" type="number" step="any" placeholder="m"></div>
-      <div class="field"><div class="field-label">TPC (t/cm)</div><input class="num-input" id="d_tpc" type="number" step="any" placeholder="吨/厘米"></div>
-    </div>
-  </div>
-  <div class="section input-section"><div class="section-title">⚖️ 排水量 (用于首尾修正)</div>
-    <div class="row">
-      <div class="field"><div class="field-label">排水量 Δ (t)</div><input class="num-input" id="d_disp" type="number" step="any" placeholder="吨"></div>
-      <div class="field"><div class="field-label">LBP (m)</div><input class="num-input" id="d_lbp" type="number" step="any" placeholder="首尾柱间长"></div>
+      <div class="field"><div class="field-label">Current Mean Draft (m)</div><input class="num-input yellow" id="d_t" type="number" step="any" placeholder="m"></div>
+      <div class="field"><div class="field-label">TPC (t/cm)</div><input class="num-input" id="d_tpc" type="number" step="any" placeholder="t/cmm"></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cDensity()">📊 计算吃水变化</button>
-  <div class="section result-section" id="denResults" style="display:none"><div class="section-title">📋 修正结果</div>
+  <div class="section input-section"><div class="section-title">⚖️ Displacement (for draft correction)</div>
+    <div class="row">
+      <div class="field"><div class="field-label">Displacement Δ (t)</div><input class="num-input" id="d_disp" type="number" step="any" placeholder="t"></div>
+      <div class="field"><div class="field-label">LBP (m)</div><input class="num-input" id="d_lbp" type="number" step="any" placeholder="LBP"></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cDensity()">📊 Calculate Draft Change</button>
+  <div class="section result-section" id="denResults" style="display:none"><div class="section-title">📋 Correction Results</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">吃水变化 (Δd)</span><span class="result-value highlight" id="d_dd"></span></div>
+      <div class="result-row"><span class="result-label">Draft Change (Δd)</span><span class="result-value highlight" id="d_dd"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">新平均吃水</span><span class="result-value" id="d_t2"></span></div>
+      <div class="result-row"><span class="result-label">New Mean Draft</span><span class="result-value" id="d_t2"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">新首吃水</span><span class="result-value" id="d_tf"></span></div>
+      <div class="result-row"><span class="result-label">New Fwd Draft</span><span class="result-value" id="d_tf"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">新尾吃水</span><span class="result-value" id="d_ta"></span></div>
+      <div class="result-row"><span class="result-label">New Aft Draft</span><span class="result-value" id="d_ta"></span></div>
     </div>
   </div>
-  <button class="reset-btn" onclick="rDensity()">↻ 重置</button>
+  <button class="reset-btn" onclick="rDensity()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="cargo-capacity" id="pageCargo">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">📦</div><div class="header-title">最大载货量</div><div class="header-sub">Maximum Cargo Capacity</div></div>
-  <div class="section input-section"><div class="section-title">⚓ 船舶参数</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">📦</div><div class="header-title">Cargo Capacity</div><div class="header-sub">Maximum Cargo Capacity</div></div>
+  <div class="section input-section"><div class="section-title">⚓ Ship Parameters</div>
     <div class="row">
-      <div class="field"><div class="field-label">夏季排水量 (t)</div><input class="num-input yellow" id="c_ds" type="number" step="any" placeholder="Δ夏季"></div>
-      <div class="field"><div class="field-label">轻船重量 (t)</div><input class="num-input" id="c_lw" type="number" step="any" placeholder="Light Wt"></div>
+      <div class="field"><div class="field-label">Summer Displacement (t)</div><input class="num-input yellow" id="c_ds" type="number" step="any" placeholder="ΔSummer"></div>
+      <div class="field"><div class="field-label">Light Ship (t)</div><input class="num-input" id="c_lw" type="number" step="any" placeholder="Light Wt"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">常数 (t)</div><input class="num-input yellow" id="c_con" type="number" step="any" placeholder="Constant"></div>
-      <div class="field"><div class="field-label">消耗品 (t)</div><input class="num-input" id="c_cons" type="number" step="any" placeholder="消耗品"></div>
-    </div>
-  </div>
-  <div class="section input-section"><div class="section-title">📐 密度修正</div>
-    <div class="row">
-      <div class="field"><div class="field-label">当前水密度 (t/m³)</div><input class="num-input yellow" id="c_d1" type="number" step="any" value="1.025"></div>
-      <div class="field"><div class="field-label">港口水密度 (t/m³)</div><input class="num-input yellow" id="c_d2" type="number" step="any" placeholder="装货港密度"></div>
-    </div>
-    <div class="row">
-      <div class="field"><div class="field-label">TPC (t/cm)</div><input class="num-input" id="c_tpc" type="number" step="any" placeholder="吨/厘米"></div>
+      <div class="field"><div class="field-label">Constant (t)</div><input class="num-input yellow" id="c_con" type="number" step="any" placeholder="Constant"></div>
+      <div class="field"><div class="field-label">Consumables (t)</div><input class="num-input" id="c_cons" type="number" step="any" placeholder="Consumables"></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cCargo()">🧮 计算最大载货量</button>
-  <div class="section result-section" id="cargoResults" style="display:none"><div class="section-title">📋 载货量结果</div>
+  <div class="section input-section"><div class="section-title">📐 Density Correction</div>
+    <div class="row">
+      <div class="field"><div class="field-label">Current ρ (t/m³)</div><input class="num-input yellow" id="c_d1" type="number" step="any" value="1.025"></div>
+      <div class="field"><div class="field-label">Port Density (t/m³)</div><input class="num-input yellow" id="c_d2" type="number" step="any" placeholder="Load Port Density"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">TPC (t/cm)</div><input class="num-input" id="c_tpc" type="number" step="any" placeholder="t/cmm"></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cCargo()">🧮 CalculateCargo Capacity</button>
+  <div class="section result-section" id="cargoResults" style="display:none"><div class="section-title">📋 Cargo Capacity Results</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">最大载货量 (夏季)</span><span class="result-value highlight" id="c_cs"></span></div>
+      <div class="result-row"><span class="result-label">Cargo Capacity (Summer)</span><span class="result-value highlight" id="c_cs"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">密度修正后载货量</span><span class="result-value" id="c_cd"></span></div>
+      <div class="result-row"><span class="result-label">Corrected Cargo Capacity</span><span class="result-value" id="c_cd"></span></div>
     </div>
   </div>
-  <button class="reset-btn" onclick="rCargo()">↻ 重置</button>
+  <button class="reset-btn" onclick="rCargo()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="fuel-consumption" id="pageFuel">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">⛽</div><div class="header-title">航次燃油计算</div><div class="header-sub">Bunker Calculator</div></div>
-  <div class="section input-section"><div class="section-title">🚢 航次信息</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">⛽</div><div class="header-title">Voyage Fuel Consumption</div><div class="header-sub">Bunker Calculator</div></div>
+  <div class="section input-section"><div class="section-title">🚢 Voyage Info</div>
     <div class="row">
-      <div class="field"><div class="field-label">航次编号</div><input class="num-input" id="fu_vn" type="text" placeholder="Voyage No."></div>
-      <div class="field"><div class="field-label">往返</div>
-        <select class="num-input yellow" id="fu_dir"><option value="laden">重载 Laden</option><option value="ballast">压载 Ballast</option></select>
+      <div class="field"><div class="field-label">Voyage No.</div><input class="num-input" id="fu_vn" type="text" placeholder="Voyage No."></div>
+      <div class="field"><div class="field-label">Direction</div>
+        <select class="num-input yellow" id="fu_dir"><option value="laden">Laden</option><option value="ballast">Ballast</option></select>
       </div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">航程距离 (NM)</div><input class="num-input yellow" id="fu_dist" type="number" step="any" placeholder="海里"></div>
-      <div class="field"><div class="field-label">航速 (kn)</div><input class="num-input" id="fu_spd" type="number" step="any" placeholder="节"></div>
+      <div class="field"><div class="field-label">Distance (NM)</div><input class="num-input yellow" id="fu_dist" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><div class="field-label">Speed (kn)</div><input class="num-input" id="fu_spd" type="number" step="any" placeholder="kn"></div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">🔥 油耗率 (t/day)</div>
+  <div class="section input-section"><div class="section-title">🔥 Consumption Rate (t/day)</div>
     <div class="row">
-      <div class="field"><div class="field-label">HSFO (海上)</div><input class="num-input" id="fu_hsea" type="number" step="any" placeholder="t/day"></div>
-      <div class="field"><div class="field-label">LSFO (海上)</div><input class="num-input" id="fu_lsea" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">HSFO (Sea Legs)</div><input class="num-input" id="fu_hsea" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">LSFO (Sea Legs)</div><input class="num-input" id="fu_lsea" type="number" step="any" placeholder="t/day"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">MGO (海上)</div><input class="num-input" id="fu_msea" type="number" step="any" placeholder="t/day"></div>
-      <div class="field"><div class="field-label">港内 HSFO</div><input class="num-input" id="fu_hpor" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">MGO (Sea Legs)</div><input class="num-input" id="fu_msea" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">Port Stays HSFO</div><input class="num-input" id="fu_hpor" type="number" step="any" placeholder="t/day"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">港内 LSFO</div><input class="num-input" id="fu_lpor" type="number" step="any" placeholder="t/day"></div>
-      <div class="field"><div class="field-label">港内 MGO</div><input class="num-input" id="fu_mpor" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">Port Stays LSFO</div><input class="num-input" id="fu_lpor" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">Port Stays MGO</div><input class="num-input" id="fu_mpor" type="number" step="any" placeholder="t/day"></div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">📅 航行时间</div>
+  <div class="section input-section"><div class="section-title">📅 Transit Time</div>
     <div class="row">
-      <div class="field"><div class="field-label">海上航行 (天)</div><input class="num-input yellow" id="fu_sea_d" type="number" step="any" placeholder="天"></div>
-      <div class="field"><div class="field-label">港内作业 (天)</div><input class="num-input" id="fu_por_d" type="number" step="any" placeholder="天"></div>
+      <div class="field"><div class="field-label">Sea Passage (days)</div><input class="num-input yellow" id="fu_sea_d" type="number" step="any" placeholder="days"></div>
+      <div class="field"><div class="field-label">Port Operations (days)</div><input class="num-input" id="fu_por_d" type="number" step="any" placeholder="days"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">安全余量 (%)</div>
+      <div class="field"><div class="field-label">Safety Margin (%)</div>
         <div style="display:flex;align-items:center;gap:10px">
           <input class="num-input" id="fu_mg" type="number" step="any" value="10" style="width:80px;flex:none">
           <span style="font-size:13px;color:#666">%</span>
         </div>
       </div>
-      <div class="field"><span class="hint">默认10%安全余量</span></div>
+      <div class="field"><span class="hint">Default10%Safety Margin</span></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cFuel()">🧮 计算燃油需求</button>
-  <div class="section result-section" id="fuelResults" style="display:none"><div class="section-title">📋 燃油计划</div>
+  <button class="calc-btn" onclick="cFuel()">🧮 Calculate Fuel Required</button>
+  <div class="section result-section" id="fuelResults" style="display:none"><div class="section-title">📋 Bunker Plan</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">HSFO 需求</span><span class="result-value highlight" id="fu_h"></span></div>
+      <div class="result-row"><span class="result-label">HSFO Required</span><span class="result-value highlight" id="fu_h"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">LSFO 需求</span><span class="result-value" id="fu_l"></span></div>
+      <div class="result-row"><span class="result-label">LSFO Required</span><span class="result-value" id="fu_l"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">MGO 需求</span><span class="result-value" id="fu_m"></span></div>
+      <div class="result-row"><span class="result-label">MGO Required</span><span class="result-value" id="fu_m"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">总燃油需求</span><span class="result-value" id="fu_t"></span></div>
+      <div class="result-row"><span class="result-label">Total Fuel Required</span><span class="result-value" id="fu_t"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">安全余量</span><span class="result-value" id="fu_mgn"></span></div>
+      <div class="result-row"><span class="result-label">Safety Margin</span><span class="result-value" id="fu_mgn"></span></div>
     </div>
   </div>
-  <button class="reset-btn" onclick="rFuel()">↻ 重置</button>
+  <button class="reset-btn" onclick="rFuel()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="dew-point" id="pageDew">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">💧</div><div class="header-title">露点通风判断</div><div class="header-sub">Dew Point Ventilation</div></div>
-  <div class="section input-section"><div class="section-title">🌡️ 舱外 (Outside)</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">💧</div><div class="header-title">Dew Point Ventilation</div><div class="header-sub">Dew Point Ventilation</div></div>
+  <div class="section input-section"><div class="section-title">🌡️ Outside (Outside)</div>
     <div class="row">
-      <div class="field"><div class="field-label">干球温度 (°C)</div><input class="num-input yellow" id="dw_od" type="number" step="any" placeholder="干球"></div>
-      <div class="field"><div class="field-label">湿球温度 (°C)</div><input class="num-input yellow" id="dw_ow" type="number" step="any" placeholder="湿球"></div>
+      <div class="field"><div class="field-label">Dry Bulb Temp (°C)</div><input class="num-input yellow" id="dw_od" type="number" step="any" placeholder="Dry Bulb"></div>
+      <div class="field"><div class="field-label">Wet Bulb Temp (°C)</div><input class="num-input yellow" id="dw_ow" type="number" step="any" placeholder="Wet Bulb"></div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">🏠 舱内 (Inside)</div>
+  <div class="section input-section"><div class="section-title">🏠 Hold (Inside)</div>
     <div class="row">
-      <div class="field"><div class="field-label">干球温度 (°C)</div><input class="num-input yellow" id="dw_id" type="number" step="any" placeholder="干球"></div>
-      <div class="field"><div class="field-label">湿球温度 (°C)</div><input class="num-input yellow" id="dw_iw" type="number" step="any" placeholder="湿球"></div>
+      <div class="field"><div class="field-label">Dry Bulb Temp (°C)</div><input class="num-input yellow" id="dw_id" type="number" step="any" placeholder="Dry Bulb"></div>
+      <div class="field"><div class="field-label">Wet Bulb Temp (°C)</div><input class="num-input yellow" id="dw_iw" type="number" step="any" placeholder="Wet Bulb"></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cDew()">🧮 计算露点 & 判断通风</button>
-  <div class="section result-section" id="dewResults" style="display:none"><div class="section-title">📋 露点结果</div>
+  <button class="calc-btn" onclick="cDew()">🧮 Calculate Dew Point & Ventilation Check</button>
+  <div class="section result-section" id="dewResults" style="display:none"><div class="section-title">📋 Dew Point Results</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">舱外露点</span><span class="result-value" id="dw_odp"></span></div>
+      <div class="result-row"><span class="result-label">Outside Dew Point</span><span class="result-value" id="dw_odp"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">舱内露点</span><span class="result-value" id="dw_idp"></span></div>
+      <div class="result-row"><span class="result-label">Hold Dew Point</span><span class="result-value" id="dw_idp"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">通风判断</span><span class="result-value highlight" id="dw_st"></span></div>
+      <div class="result-row"><span class="result-label">Ventilation Verdict</span><span class="result-value highlight" id="dw_st"></span></div>
     </div>
   </div>
-  <button class="reset-btn" onclick="rDew()">↻ 重置</button>
+  <button class="reset-btn" onclick="rDew()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <div class="tool-page" data-page="squat-calc" id="pageSquat">
-  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
-  <div class="tool-header"><div class="header-icon">📏</div><div class="header-title">船舶下沉量</div><div class="header-sub">Squat & UKC Calculator</div></div>
-  <div class="section input-section"><div class="section-title">📐 船体参数</div>
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
+  <div class="tool-header"><div class="header-icon">📏</div><div class="header-title">Squat</div><div class="header-sub">Squat & UKC Calculator</div></div>
+  <div class="section input-section"><div class="section-title">📐 Hull Parameters</div>
     <div class="row">
-      <div class="field"><div class="field-label">吃水 d (m)</div><input class="num-input yellow" id="s_dr" type="number" step="any" placeholder="Draft"></div>
-      <div class="field"><div class="field-label">水深 h (m)</div><input class="num-input yellow" id="s_dep" type="number" step="any" placeholder="Depth"></div>
+      <div class="field"><div class="field-label">Draft d (m)</div><input class="num-input yellow" id="s_dr" type="number" step="any" placeholder="Draft"></div>
+      <div class="field"><div class="field-label">Depth h (m)</div><input class="num-input yellow" id="s_dep" type="number" step="any" placeholder="Depth"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">航速 V (kn)</div><input class="num-input yellow" id="s_spd" type="number" step="any" placeholder="Speed"></div>
-      <div class="field"><div class="field-label">方形系数 Cb</div><input class="num-input" id="s_cb" type="number" step="any" placeholder="自动计算或手动"></div>
+      <div class="field"><div class="field-label">Speed V (kn)</div><input class="num-input yellow" id="s_spd" type="number" step="any" placeholder="Speed"></div>
+      <div class="field"><div class="field-label">Block Coeff. Cb</div><input class="num-input" id="s_cb" type="number" step="any" placeholder="Auto or manual"></div>
     </div>
   </div>
-  <div class="section input-section"><div class="section-title">🔩 Cb 自动计算（选填）</div>
+  <div class="section input-section"><div class="section-title">🔩 Cb Auto（Optional）</div>
     <div class="row">
-      <div class="field"><div class="field-label">L (m)</div><input class="num-input" id="s_cl" type="number" step="any" placeholder="船长"></div>
-      <div class="field"><div class="field-label">B (m)</div><input class="num-input" id="s_cbw" type="number" step="any" placeholder="船宽"></div>
+      <div class="field"><div class="field-label">L (m)</div><input class="num-input" id="s_cl" type="number" step="any" placeholder="Master"></div>
+      <div class="field"><div class="field-label">B (m)</div><input class="num-input" id="s_cbw" type="number" step="any" placeholder="Beam"></div>
     </div>
     <div class="row">
-      <div class="field"><div class="field-label">d (m)</div><input class="num-input" id="s_cbd" type="number" step="any" placeholder="吃水"></div>
-      <div class="field"><div class="field-label">Δ (t)</div><input class="num-input" id="s_cdisp" type="number" step="any" placeholder="排水量"></div>
+      <div class="field"><div class="field-label">d (m)</div><input class="num-input" id="s_cbd" type="number" step="any" placeholder="Draft"></div>
+      <div class="field"><div class="field-label">Δ (t)</div><input class="num-input" id="s_cdisp" type="number" step="any" placeholder="Displacement"></div>
     </div>
-    <button class="calc-btn" onclick="calcCb()">🔢 计算 Cb</button>
+    <button class="calc-btn" onclick="calcCb()">🔢 Calculate Cb</button>
   </div>
-  <div class="section input-section"><div class="section-title">🌊 水道类型</div>
+  <div class="section input-section"><div class="section-title">🌊 Water Type</div>
     <div class="row">
       <div class="field">
         <select class="num-input yellow" id="s_wt">
-          <option value="open">开阔水道 Open Water</option>
-          <option value="restricted">受限水道 Restricted</option>
+          <option value="open">Open Water Open Water</option>
+          <option value="restricted">Confined Water Restricted</option>
         </select>
       </div>
     </div>
   </div>
-  <button class="calc-btn" onclick="cSquat()">📊 计算下沉量 & UKC</button>
-  <div class="section result-section" id="squatResults" style="display:none"><div class="section-title">📋 下沉量结果</div>
+  <button class="calc-btn" onclick="cSquat()">📊 CALCULATE SQUAT & UKC</button>
+  <div class="section result-section" id="squatResults" style="display:none"><div class="section-title">📋 Squat Results</div>
     <div class="result-card">
-      <div class="result-row"><span class="result-label">UKC 当前 (m)</span><span class="result-value" id="s_pukc"></span></div>
+      <div class="result-row"><span class="result-label">UKC Current (m)</span><span class="result-value" id="s_pukc"></span></div>
       <div class="result-divider"></div>
       <div class="result-row"><span class="result-label">Squat (m)</span><span class="result-value highlight" id="s_sq"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">UKC 动态 (m)</span><span class="result-value" id="s_ukc"></span></div>
+      <div class="result-row"><span class="result-label">UKC Dynamic (m)</span><span class="result-value" id="s_ukc"></span></div>
       <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">评估</span><span class="result-value" id="s_st"></span></div>
+      <div class="result-row"><span class="result-label">Assessment</span><span class="result-value" id="s_st"></span></div>
     </div>
   </div>
-  <button class="reset-btn" onclick="rSquat()">↻ 重置</button>
+  <button class="reset-btn" onclick="rSquat()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
 </div>
 
 <script>
 var MENU = [
-  {id:"eta",icon:"⏳",color:"blue",label:"ETA计算器",desc:"航速/距离/时间/ETA"},
-  {id:"night-orders",icon:"📋",color:"dark",label:"夜航命令",desc:"Night Orders 一键生成"},
-  {id:"true-wind",icon:"🌬️",color:"teal",label:"真风计算",desc:"真风风向/风速计算"},
-  {id:"density-draft",icon:"🌊",color:"cyan",label:"吃水密度修正",desc:"水密度变化→首尾吃水"},
-  {id:"cargo-capacity",icon:"📦",color:"green",label:"最大载货量",desc:"排水量/轻船/常数/消耗品"},
-  {id:"fuel-consumption",icon:"⛽",color:"orange",label:"航次燃油计算",desc:"海上段/港内段/ROB"},
-  {id:"dew-point",icon:"💧",color:"purple",label:"露点通风判断",desc:"干湿球温度→通风决策"},
-  {id:"squat-calc",icon:"📏",color:"brown",label:"下沉量计算",desc:"Squat / UKC 计算"}
+  {id:"eta",icon:"⏳",color:"blue",label:"ETACalculator",desc:"Speed/Distance/Time/ETA"},
+  {id:"night-orders",icon:"📋",color:"dark",label:"Night Orders",desc:"Night Orders Generator"},
+  {id:"true-wind",icon:"🌬️",color:"teal",label:"True Wind",desc:"True Wind Dir. & Speed"},
+  {id:"density-draft",icon:"🌊",color:"cyan",label:"Density Draft Correction",desc:"Density → Draft Correction"},
+  {id:"cargo-capacity",icon:"📦",color:"green",label:"Cargo Capacity",desc:"Disp./Light Ship/Const./Cons."},
+  {id:"fuel-consumption",icon:"⛽",color:"orange",label:"Voyage Fuel Consumption",desc:"Sea Legs/Port/ROB"},
+  {id:"dew-point",icon:"💧",color:"purple",label:"Dew Point Ventilation",desc:"Wet/Dry Bulb → Ventilation"},
+  {id:"squat-calc",icon:"📏",color:"brown",label:"Squat / UKC Calculator",desc:"Squat / UKC Calculator"}
 ];
 
 function $(id){return document.getElementById(id)}
@@ -453,28 +457,28 @@ function cETA(){
   var d=$('e_d').textContent,t=$('e_t').textContent;
   var su=parseInt($('e_su').value),du=parseInt($('e_du').value);
   var dist=parseFloat($('e_dist').value),spd=parseFloat($('e_spd').value);
-  if(!d||!t||isNaN(dist)||isNaN(spd)){toast('请填写完整');return}
+  if(!d||!t||isNaN(dist)||isNaN(spd)){toast('Please fill all fields');return}
   var parts=d.split('-');
   var dt=new Date(parts[0],parts[1]-1,parts[2],t.split(':')[0],t.split(':')[1]);
   var h=dist/spd;
   var days=Math.floor(h/24),hrs=Math.floor(h%24),mins=Math.round((h%1)*60);
-  var tdStr=days+'天 '+hrs+'时 '+mins+'分';
+  var tdStr=days+'days '+hrs+'hrs '+mins+'mins';
   $('e_td').value=tdStr;$('e_td2').textContent=tdStr;
   var utc=new Date(dt.getTime()-su*3600000);
   var eta=new Date(utc.getTime()+du*3600000+h*3600000);
-  var etaStr=eta.getDate()+'日 '+String(eta.getHours()).padStart(2,'0')+':'+String(eta.getMinutes()).padStart(2,'0');
+  var etaStr=eta.getDate()+'d '+String(eta.getHours()).padStart(2,'0')+':'+String(eta.getMinutes()).padStart(2,'0');
   $('e_eta2').textContent=etaStr;$('e_tt').value=etaStr;
   var etaUtc=new Date(utc.getTime()+h*3600000);
   $('e_eta_utc').textContent=etaUtc.toISOString().replace('T',' ').substr(0,16);
   // Speed table
-  var html='<tr><th>航速(kn)</th><th>航行时间</th><th>ETA (目的地LT)</th></tr>';
+  var html='<tr><th>Speed(kn)</th><th>Transit Time</th><th>ETA (DestinationLT)</th></tr>';
   var base=Math.round(spd*2)/2;
   for(var s=base-2;s<=base+2;s+=0.5){
     if(s<=0)continue;
     var h2=dist/s,d2=Math.floor(h2/24),h3=Math.floor(h2%24),m2=Math.round((h2%1)*60);
     var tStr=d2+'d '+h3+'h '+m2+'m';
     var e2=new Date(utc.getTime()+du*3600000+h2*3600000);
-    var eStr=e2.getDate()+'日 '+String(e2.getHours()).padStart(2,'0')+':'+String(e2.getMinutes()).padStart(2,'0');
+    var eStr=e2.getDate()+'d '+String(e2.getHours()).padStart(2,'0')+':'+String(e2.getMinutes()).padStart(2,'0');
     var cls=s===spd?' class="highlight-row"':'';
     html+='<tr'+cls+'><td>'+s.toFixed(1)+'</td><td>'+tStr+'</td><td>'+eStr+'</td></tr>';
   }
@@ -486,72 +490,72 @@ function cETA(){
 
 // ===== Night Orders =====
 var ORDERS=[
-  {cat:"航路",text:"本航次航路已标注在海图上，值班驾驶员应熟记转向点和航向。"},
-  {cat:"航路",text:"注意避开禁航区和浅水区，严格按照计划航线行驶。"},
-  {cat:"航路",text:"接近转向点时提前核对船位，确认无误后方可改向。"},
-  {cat:"航路",text:"沿岸航行时保持安全距离，注意渔网和渔船。"},
-  {cat:"航路",text:"通过分道通航制区域时严格遵守通航规则。"},
-  {cat:"瞭望",text:"加强瞭望，严格遵守国际海上避碰规则。"},
-  {cat:"瞭望",text:"雾航时开启雷达，鸣放雾号，减速备车航行。"},
-  {cat:"瞭望",text:"夜间航行时尤其注意小船和漂浮物。"},
-  {cat:"瞭望",text:"保持VHF CH16不间断守听。"},
-  {cat:"瞭望",text:"值班期间严禁使用手机做与值班无关的事。"},
-  {cat:"瞭望",text:"发现异常灯光或不明目标立即报告船长。"},
-  {cat:"船位",text:"每班至少进行一次天文定位或GPS核对。"},
-  {cat:"船位",text:"进入狭水道或航道时加大定位频次。"},
-  {cat:"船位",text:"交接班时必须核对船位和航向。"},
-  {cat:"船位",text:"使用多种定位方法（GPS、雷达、目测）交叉验证船位。"},
-  {cat:"船位",text:"每班交接时记录准确船位于航海日志。"},
-  {cat:"主机",text:"主机转速和负荷严格按机舱要求执行，不得擅自加减车。"},
-  {cat:"主机",text:"如遇主机故障或异常立即停车并报告船长。"},
-  {cat:"主机",text:"机动航行时提前通知机舱备车。"},
-  {cat:"主机",text:"换油操作需提前通知机舱，确认油品切换完成后方可进入排放控制区。"},
-  {cat:"主机",text:"备车航行期间加强主机参数监控。"},
-  {cat:"安全",text:"如遇紧急情况立即采取行动并报告船长，不要犹豫。"},
-  {cat:"安全",text:"消防救生设备保持随时可用状态。"},
-  {cat:"安全",text:"晚间安全巡视按照巡回检查路线严格执行。"},
-  {cat:"安全",text:"进入密闭舱室必须填写许可证并按程序进行气体检测。"},
-  {cat:"安全",text:"雷雨天气注意关闭非必要电子设备，防止雷击。"},
-  {cat:"值班",text:"值班驾驶员和水手不得擅离职守。"},
-  {cat:"值班",text:"航行灯、信号灯按规定开启，每日日落时检查。"},
-  {cat:"值班",text:"自动舵与手动舵按规范切换，每次切换记录在航海日志。"},
-  {cat:"值班",text:"大风浪天气注意人身安全，甲板作业必须穿戴救生衣和安全绳。"},
-  {cat:"值班",text:"值班期间保持驾驶台秩序，无关人员不得进入。"},
-  {cat:"油污",text:"严禁任何形式的油污排放，垃圾按分类要求处理。"},
-  {cat:"油污",text:"加油作业期间全程值守，防止跑油。"},
-  {cat:"油污",text:"压载水排放须符合公约要求并记录。"},
-  {cat:"油污",text:"机舱污水必须经油水分离器处理后方可排放。"},
-  {cat:"通信",text:"按时接收气象传真和航行警告，张贴在驾驶台公告栏。"},
-  {cat:"通信",text:"测试应急无线电示位标（EPIRB）是否在正常位置。"},
-  {cat:"通信",text:"卫星通信设备保持开机状态，以便随时联系。"},
-  {cat:"通信",text:"每天按时收发船位报和气象报。"},
-  {cat:"装卸",text:"装卸货期间每2小时检查水尺和船体倾斜情况。"},
-  {cat:"装卸",text:"装卸货期间注意调整压载水，保持合适吃水和纵倾。"},
-  {cat:"装卸",text:"装卸货期间值班驾驶员监仓，拍照留底。"},
-  {cat:"装卸",text:"危险品装卸需严格核对清单和积载位置。"},
-  {cat:"装卸",text:"大副应在每日0600和1800向驾驶台报告货舱状况。"},
-  {cat:"冰区",text:"冰区航行时使用安全航速，注意避开大块浮冰。"},
-  {cat:"冰区",text:"注意船体振动和螺旋桨噪音，疑似冰击立即报告。"},
-  {cat:"冰区",text:"冰区航行时压载水舱适当增加压载以加强船体强度。"},
-  {cat:"冰区",text:"破冰船引航时保持安全距离，服从破冰船指挥。"},
-  {cat:"引水",text:"引航员登船时做好安全措施，放好引水梯和舷灯。"},
-  {cat:"引水",text:"引航员在船期间值班驾驶员配合操作，保持独立核查。"},
-  {cat:"引水",text:"引航员离船后及时调整至计划航向并报告船长。"},
-  {cat:"驾驶台",text:"驾驶台航行设备（雷达、GPS、AIS、ECDIS）保持良好工作状态。"},
-  {cat:"驾驶台",text:"舵机间每班巡视检查，确认设备正常。"},
-  {cat:"驾驶台",text:"磁罗经和陀螺罗经每班核对自差和误差。"},
-  {cat:"驾驶台",text:"航海日志填写应完整、准确、及时，不得提前或补填。"},
-  {cat:"驾驶台",text:"电子海图和纸质海图同时更新，确认一致。"},
-  {cat:"机舱",text:"风浪天气注意机舱温度及通风口是否进水。"},
-  {cat:"机舱",text:"主机缸套水温度和滑油压力异常立即通知轮机长。"},
-  {cat:"机舱",text:"舵机每班测试一次并记录。"},
-  {cat:"机舱",text:"锅炉和废气锅炉运行参数每班记录。"},
-  {cat:"系泊",text:"靠泊期间梯口值班不得间断，登轮人员核对证件。"},
-  {cat:"系泊",text:"系泊缆绳受力均匀，潮水变化时及时调整。"},
-  {cat:"系泊",text:"舷梯和安全网必须按规范放置，夜间照明充足。"},
-  {cat:"系泊",text:"靠离泊时驾驶台与船头船尾保持通信畅通。"},
-  {cat:"医疗",text:"如有船员身体不适，及时报告船长并启动医疗程序。"},
-  {cat:"医疗",text:"药品柜定期检查，急救药品保持齐全。"}
+  {cat:"Safety",text:"Call me at any time if in any doubt."},
+  {cat:"Safety",text:"Keep a sharp lookout by sight and hearing."},
+  {cat:"Safety",text:"Strictly comply with COLREGS at all times."},
+  {cat:"Safety",text:"Maintain safe speed for prevailing conditions."},
+  {cat:"Safety",text:"If in doubt, reduce speed or stop engines."},
+  {cat:"Safety",text:"When in doubt — CALL ME. Do not hesitate."},
+  {cat:"Avoidance",text:"If CPA less than 1.0 NM, call me at once."},
+  {cat:"Avoidance",text:"Do not overtake without my permission."},
+  {cat:"Avoidance",text:"Keep well clear of all fishing vessels."},
+  {cat:"Avoidance",text:"Do not assume give-way vessels will give way."},
+  {cat:"Avoidance",text:"Make bold alterations to avoid close quarters."},
+  {cat:"Avoidance",text:"Call me if any vessel approaches within 5 NM."},
+  {cat:"Avoidance",text:"Do not cross ahead of another vessel."},
+  {cat:"Avoidance",text:"Maintain safe passing distance at least 1 NM."},
+  {cat:"Weather",text:"If wind exceeds 7 Bft, call me."},
+  {cat:"Weather",text:"If visibility drops below 2 NM, call me at once."},
+  {cat:"Weather",text:"In sudden fog, call me immediately."},
+  {cat:"Weather",text:"Reduce speed if excessive slamming or rolling."},
+  {cat:"Weather",text:"If swell height exceeds 4 m, call me."},
+  {cat:"Weather",text:"In heavy weather, secure all loose gear."},
+  {cat:"Weather",text:"Close all watertight doors in heavy weather."},
+  {cat:"Weather",text:"If barometer drops rapidly, call me."},
+  {cat:"Navigation",text:"Call me 30 min before pilot station arrival."},
+  {cat:"Navigation",text:"Verify position before every course change."},
+  {cat:"Navigation",text:"Call me before entering TSS or precautionary area."},
+  {cat:"Navigation",text:"Test steering gear one hour before arrival."},
+  {cat:"Navigation",text:"Keep echo sounder on in shallow water."},
+  {cat:"Navigation",text:"Set radar to appropriate range for conditions."},
+  {cat:"Navigation",text:"Do not enter restricted area without me on bridge."},
+  {cat:"Navigation",text:"Call me when approaching waypoint."},
+  {cat:"Navigation",text:"Call me if UKC less than 2.0 m."},
+  {cat:"Navigation",text:"Hand steer when in pilotage waters."},
+  {cat:"Engine",text:"If any machinery alarm sounds, call me."},
+  {cat:"Engine",text:"If engine RPM fluctuates abnormally, call me."},
+  {cat:"Engine",text:"Monitor main engine parameters every hour."},
+  {cat:"Engine",text:"Call me if cooling water temperature rises suddenly."},
+  {cat:"Engine",text:"If abnormal vibration detected, reduce RPM and call me."},
+  {cat:"Engine",text:"Do not switch fuel without chief engineer approval."},
+  {cat:"Engine",text:"If bunkering, monitor transfer continuously."},
+  {cat:"Security",text:"Report all unidentified vessels approaching the ship."},
+  {cat:"Security",text:"Keep accommodation doors secured at night."},
+  {cat:"Security",text:"Keep all external lights at night as per regulations."},
+  {cat:"Security",text:"Check steering gear room every watch."},
+  {cat:"Security",text:"Report any unauthorised person on board."},
+  {cat:"Security",text:"Lower gangway only after port clearance."},
+  {cat:"Pollution",text:"No garbage disposal overboard at any time."},
+  {cat:"Pollution",text:"Do not discharge any oily water."},
+  {cat:"Pollution",text:"Save all garbage in designated bins."},
+  {cat:"Pollution",text:"Only incinerate in port with permission."},
+  {cat:"Cargo",text:"Monitor cargo temperature every hour."},
+  {cat:"Cargo",text:"Check lashing every watch in heavy weather."},
+  {cat:"Cargo",text:"If cargo shifts, call me immediately."},
+  {cat:"Cargo",text:"Monitor ballast operations every watch."},
+  {cat:"Cargo",text:"Ensure hatch covers are properly secured."},
+  {cat:"Cargo",text:"Check reefer container alarms each watch."},
+  {cat:"Crew",text:"No crew on deck without officer permission at night."},
+  {cat:"Crew",text:"OOW must ensure helmsman is alert at all times."},
+  {cat:"Crew",text:"All lookouts must be properly rested."},
+  {cat:"Crew",text:"Do not allow unauthorised personnel on the bridge."},
+  {cat:"Crew",text:"Call me if any crew member is unwell."},
+  {cat:"Emergency",text:"In case of fire, sound alarm and muster crew."},
+  {cat:"Emergency",text:"Lifeboat and liferaft equipment must be ready."},
+  {cat:"Emergency",text:"EPIRB and SART in standby at all times."},
+  {cat:"Emergency",text:"If man overboard, release lifebuoy immediately."},
+  {cat:"Emergency",text:"Emergency steering drill to be conducted weekly."},
+  {cat:"Emergency",text:"All emergency exits and fire doors clear."}
 ];
 
 function hashDate(d){
@@ -578,7 +582,7 @@ function genOrders(){
   var pick=shuffled.slice(0,6);
   var html='';
   for(var i=0;i<pick.length;i++){
-    var o=pick[i],colors={航路:'#1F4E79',瞭望:'#2E7D32',船位:'#F57C00',主机:'#C62828',安全:'#D32F2F',值班:'#6A1B9A',油污:'#00695C',通信:'#1565C0',装卸:'#E65100',冰区:'#00838F',引水:'#4E342E',驾驶台:'#37474F',机舱:'#B71C1C',系泊:'#4527A0',医疗:'#78909C'};
+    var o=pick[i],colors={Route:'#1F4E79',Lookout:'#2E7D32',Position:'#F57C00',Main Engine:'#C62828',Safety:'#D32F2F',Watchkeeping:'#6A1B9A',Oil Pollution:'#00695C',Communication:'#1565C0',Cargo Ops:'#E65100',Ice Navigation:'#00838F',Pilot:'#4E342E',Bridge:'#37474F',Engine Room:'#B71C1C',Mooring:'#4527A0',Medical:'#78909C'};
     html+='<div class="order-card"><div class="order-num">'+(i+1)+'</div>'
       +'<div class="order-content"><span class="order-text">'+o.text+'</span>'
       +'<span class="order-tag" style="background:'+(colors[o.cat]||'#8A9BB5')+'">'+o.cat+'</span></div></div>';
@@ -589,11 +593,11 @@ function genOrders(){
 
 function copyOrders(){
   var n=$('no_list').querySelectorAll('.order-text');
-  if(!n.length){toast('请先生成命令');return}
+  if(!n.length){toast('Generate orders first');return}
   var txt='📋 Night Orders - '+new Date().toISOString().split('T')[0]+'\n';
   for(var i=0;i<n.length;i++){txt+=(i+1)+'. '+n[i].textContent+'\n'}
-  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('已复制 '+n.length+' 条命令')})}
-  else{toast('复制失败，请手动复制')}
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('Copied! '+n.length+' orders')})}
+  else{toast('Copy failed，Copy manually')}
 }
 
 function rNight(){genOrders()}
@@ -610,7 +614,7 @@ function rWind(){
 function cWind(){
   var cog=parseFloat($('w_cog').value),sog=parseFloat($('w_sog').value);
   var awa=parseFloat($('w_awa').value),aws=parseFloat($('w_aws').value);
-  if(isNaN(cog)||isNaN(sog)||isNaN(awa)||isNaN(aws)){toast('请填写完整');return}
+  if(isNaN(cog)||isNaN(sog)||isNaN(awa)||isNaN(aws)){toast('Please fill all fields');return}
   var cr=cog*Math.PI/180;
   var sx=sog*Math.sin(cr),sy=sog*Math.cos(cr);
   var ar=awa*Math.PI/180;
@@ -625,14 +629,14 @@ function cWind(){
   var rel=awa;
   if(rel>180)rel-=360;
   var relStr='';
-  if(Math.abs(rel)<10)relStr='船首风 (Head Wind)';
-  else if(rel>10&&rel<80)relStr='左舷受风 (Port Bow, '+rel.toFixed(0)+'°)';
-  else if(rel>=80&&rel<=100)relStr='左正横风 (Port Beam)';
-  else if(rel>100&&rel<170)relStr='左舷尾风 (Port Quarter, '+rel.toFixed(0)+'°)';
-  else if(Math.abs(rel)>=170)relStr='顺风 (Following Wind)';
-  else if(rel<-10&&rel>-80)relStr='右舷受风 (Starboard Bow, '+(-rel).toFixed(0)+'°)';
-  else if(rel<=-80&&rel>=-100)relStr='右正横风 (Starboard Beam)';
-  else if(rel<-100&&rel>-170)relStr='右舷尾风 (Starboard Quarter, '+(-rel).toFixed(0)+'°)';
+  if(Math.abs(rel)<10)relStr='Head Wind (Head Wind)';
+  else if(rel>10&&rel<80)relStr='PortWind Side (Port Bow, '+rel.toFixed(0)+'°)';
+  else if(rel>=80&&rel<=100)relStr='Port Beam Wind (Port Beam)';
+  else if(rel>100&&rel<170)relStr='Port Quarter ('+rel.toFixed(0)+'°)';
+  else if(Math.abs(rel)>=170)relStr='Following Wind (Following Wind)';
+  else if(rel<-10&&rel>-80)relStr='StbdWind Side (Starboard Bow, '+(-rel).toFixed(0)+'°)';
+  else if(rel<=-80&&rel>=-100)relStr='Stbd Beam Wind (Starboard Beam)';
+  else if(rel<-100&&rel>-170)relStr='Stbd Quarter (Starboard Quarter, '+(-rel).toFixed(0)+'°)';
   $('w_rel').textContent=relStr;
   $('windResults').style.display='block';
   ls('w_cog',cog);ls('w_sog',sog);ls('w_awa',awa);ls('w_aws',aws);
@@ -653,7 +657,7 @@ function cDensity(){
   var d1=parseFloat($('d_d1').value),d2=parseFloat($('d_d2').value);
   var t=parseFloat($('d_t').value),tpc=parseFloat($('d_tpc').value);
   var disp=parseFloat($('d_disp').value),lbp=parseFloat($('d_lbp').value);
-  if(isNaN(d1)||isNaN(d2)||isNaN(t)||isNaN(tpc)){toast('请填写完整');return}
+  if(isNaN(d1)||isNaN(d2)||isNaN(t)||isNaN(tpc)){toast('Please fill all fields');return}
   var dd=t*(d1/d2-1);
   if(!isNaN(tpc)){dd=dd/tpc*100}
   $('d_dd').textContent=(d1!==d2?((d1-d2)*1000).toFixed(1):'—')+' kg/m³ ('+dd.toFixed(2)+' m)';
@@ -688,7 +692,7 @@ function cCargo(){
   var con=parseFloat($('c_con').value),cons=parseFloat($('c_cons').value);
   var d1=parseFloat($('c_d1').value),d2=parseFloat($('c_d2').value);
   var tpc=parseFloat($('c_tpc').value);
-  if(isNaN(ds)||isNaN(lw)||isNaN(con)||isNaN(cons)){toast('请填写完整');return}
+  if(isNaN(ds)||isNaN(lw)||isNaN(con)||isNaN(cons)){toast('Please fill all fields');return}
   var cs=ds-lw-con-cons;
   $('c_cs').textContent=cs.toFixed(2)+' t';
   if(!isNaN(d1)&&!isNaN(d2)&&d1!==d2){
@@ -768,20 +772,20 @@ function dewPoint(td,tw){
 function cDew(){
   var od=parseFloat($('dw_od').value),ow=parseFloat($('dw_ow').value);
   var id=parseFloat($('dw_id').value),iw=parseFloat($('dw_iw').value);
-  if(isNaN(od)||isNaN(ow)||isNaN(id)||isNaN(iw)){toast('请填写完整');return}
+  if(isNaN(od)||isNaN(ow)||isNaN(id)||isNaN(iw)){toast('Please fill all fields');return}
   var odp=dewPoint(od,ow),idp=dewPoint(id,iw);
   $('dw_odp').textContent=odp.toFixed(1)+'°C';
   $('dw_idp').textContent=idp.toFixed(1)+'°C';
   var st=$('dw_st');
   st.style.background='';
   if(idp<=odp-2){
-    st.textContent='✅ 可以通风 (舱内露点低于舱外2°C以上)';
+    st.textContent='✅ VENTILATE (Hold DP < Outside Air2°C)';
     st.style.background='#4caf50';st.style.color='#fff';
   }else if(idp<=odp){
-    st.textContent='⚠️ 谨慎通风 (舱内露点略低于舱外)';
+    st.textContent='⚠️ VENTILATE WITH CAUTION (Hold DP slightly < Outside: VENTILATE WITH CAUTION)';
     st.style.background='#f57c00';st.style.color='#fff';
   }else{
-    st.textContent='⛔ 禁止通风 (舱内露点高于舱外, 避免结露)';
+    st.textContent='⛔ DO NOT VENTILATE (Hold DP > Outside: VENTILATE, Avoid condensation)';
     st.style.background='#d32f2f';st.style.color='#fff';
   }
   st.style.cssText+='padding:12px;border-radius:8px;text-align:center;font-size:13px;font-weight:700';
@@ -810,7 +814,7 @@ function rSquat(){
 function calcCb(){
   var L=parseFloat($('s_cl').value),B=parseFloat($('s_cbw').value);
   var d=parseFloat($('s_cbd').value),disp=parseFloat($('s_cdisp').value);
-  if(isNaN(L)||isNaN(B)||isNaN(d)||isNaN(disp)){toast('请填写完整');return}
+  if(isNaN(L)||isNaN(B)||isNaN(d)||isNaN(disp)){toast('Please fill all fields');return}
   var cb=disp/1.025/(L*B*d);
   $('s_cb').value=cb.toFixed(3);
   toast('Cb = '+cb.toFixed(3));
@@ -819,8 +823,8 @@ function calcCb(){
 function cSquat(){
   var dr=parseFloat($('s_dr').value),dep=parseFloat($('s_dep').value);
   var spd=parseFloat($('s_spd').value),cb=parseFloat($('s_cb').value);
-  if(isNaN(dr)||isNaN(dep)||isNaN(spd)||isNaN(cb)){toast('请填写完整');return}
-  if(dr>=dep){toast('吃水超过水深！');return}
+  if(isNaN(dr)||isNaN(dep)||isNaN(spd)||isNaN(cb)){toast('Please fill all fields');return}
+  if(dr>=dep){toast('Draft exceeds depth!！');return}
   var ukcB=dep-dr;
   var ht=dep/dr;
   var sq=cb*spd*spd/100;

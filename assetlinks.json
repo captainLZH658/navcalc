@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.lzh.navcalc",
+      "sha256_cert_fingerprints": [
+        "BF:B4:A4:76:93:D0:85:49:A6:AE:D1:44:3F:51:34:E8:30:BB:95:BF:BA:29:0F:03:F4:3B:5B:73:88:DA:FA:7D"
+      ]
+    }
+  }
+]

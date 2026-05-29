@@ -1,0 +1,5 @@
+JS: "起始"
+Traceback (most recent call last):
+  File "D:\Users\Admin\Desktop\航海计算APP\analyze_cn.py", line 21, in <module>
+    print(f'  ...{ctx}...')
+UnicodeEncodeError: 'gbk' codec can't encode character '\u21b5' in position 12: illegal multibyte sequence

@@ -1,8 +1,9 @@
 {
-  "name": "航海计算",
+  "name": "LZH NavCalc",
   "short_name": "NavCalc",
-  "description": "8航海工具集",
-  "start_url": "index.html",
+  "description": "8 Nautical Tools for Mariners",
+  "start_url": "https://captainlzh658.github.io/navcalc/",
+  "scope": "https://captainlzh658.github.io/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#1f4e79",

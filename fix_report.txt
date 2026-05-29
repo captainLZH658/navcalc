@@ -1,0 +1,21 @@
+Fixed 1x: 'Port尾风 (Port Quarter, ' -> 'Port Quarter ('
+NOT FOUND: 'Port尾风'
+Fixed 1x: 'Stbd尾风' -> 'Stbd Quarter'
+NOT FOUND: '尾风'
+NOT FOUND: 'class="field-label">Direction'
+NOT FOUND: 'Calculate Fuel Required'
+NOT FOUND: '🧮 Calculate Fuel Required'
+Fixed 1x: '系泊' -> 'Mooring'
+Fixed 1x: '装卸' -> 'Cargo Ops'
+NOT FOUND: 'Laden Laden'
+Fixed 1x: 'Ballast Ballast' -> 'Ballast'
+Fixed 1x: 'Laden' -> 'Laden'
+NOT FOUND: '🧮  Calculate Fuel Required'
+
+Remaining Chinese strings: 4
+  "往返" ... class="field"><div class="field-label">往返</div>         <select class="num-input ...
+  "燃油需求" ..."calc-btn" onclick="cFuel()">🧮 Calculate燃油需求</button>   <div class="section result-s...
+  "重载" ...llow" id="fu_dir"><option value="laden">重载 Laden</option><option value="ballast">B...
+  "需求" ...alc-btn" onclick="cFuel()">🧮 Calculate燃油需求</button>   <div class="section result-s...
+
+Saved index_english3.html

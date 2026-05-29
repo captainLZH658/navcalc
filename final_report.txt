@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Users\Admin\Desktop\∫Ω∫£º∆À„APP\to_english6.py", line 15, in <module>
+    print('ALL CHINESE TEXT REPLACED \u2713')
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2713' in position 26: illegal multibyte sequence
