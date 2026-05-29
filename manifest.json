@@ -1,0 +1,16 @@
+{
+  "name": "航海计算助手",
+  "short_name": "NavCalc",
+  "description": "航海计算工具集：ETA / 下沉量 / 真风 / 密度修正 / 载货量 / 燃油 / 露点通风 / 夜航命令",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#004080",
+  "theme_color": "#004080",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚓</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

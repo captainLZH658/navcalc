@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>航海计算助手</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4E79">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f4f8;color:#333;max-width:750px;margin:0 auto;min-height:100vh}
+.page-home{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#e8edf5 0%,#f0f4f8 100%)}
+.home-header{padding:30px 40px 20px;text-align:center}
+.home-title{font-size:40px;font-weight:700;color:#004080}
+.home-sub{font-size:16px;color:#666;margin-top:6px}
+.menu-grid{padding:10px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.menu-item{background:#fff;border-radius:12px;padding:22px 16px;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.menu-item:active{opacity:.8;transform:scale(.97)}
+.menu-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:8px}
+.icon-blue{background:#e3f0ff}.icon-cyan{background:#e0f7fa}.icon-teal{background:#e0f2f1}.icon-green{background:#e8f5e9}.icon-orange{background:#fff3e0}.icon-purple{background:#f3e5f5}.icon-brown{background:#efebe9}.icon-dark{background:#e8eaf0}
+.menu-label{font-size:15px;font-weight:600;color:#333;margin-bottom:4px}
+.menu-desc{font-size:11px;color:#888}
+.tool-page{display:none;min-height:100vh;background:#f0f4f8;padding-bottom:60px}
+.tool-page.active{display:block}
+.back-bar{background:#fff;padding:12px 16px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;font-size:18px;color:#1F4E79;cursor:pointer;padding:4px 0}
+.back-text{font-size:14px;font-weight:500}
+.tool-header{text-align:center;padding:24px 16px 16px}
+.header-icon{font-size:40px}
+.header-title{display:block;font-size:24px;font-weight:700;color:#1F4E79;margin-top:4px}
+.header-sub{display:block;font-size:13px;color:#8A9BB5;margin-top:4px}
+.section{background:#fff;border-radius:12px;padding:16px;margin:0 12px 16px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.section-title{font-size:15px;font-weight:600;color:#1F4E79;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #E8EDF3}
+.input-section{border-left:4px solid #F5C518}
+.result-section{border-left:4px solid #1F4E79}
+.row{display:flex;gap:12px;margin-bottom:14px}
+.row:last-child{margin-bottom:0}
+.field{flex:1;min-width:0}
+.field-label{display:block;font-size:13px;color:#444;margin-bottom:6px;font-weight:500}
+.num-input{width:100%;min-height:42px;background:#F5F7FA;border:2px solid #DEE4EC;border-radius:5px;padding:8px 14px;font-size:15px;color:#333;outline:none;text-align:center}
+.num-input:focus{border-color:#1F4E79}
+.num-input.yellow{background:#FFF8E0;border-color:#F5C518}
+.num-input.yellow:focus{border-color:#F5C518}
+.picker-input{width:100%;min-height:42px;background:#F5F7FA;border:2px solid #DEE4EC;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#333;padding:8px 14px;text-align:center}
+.calc-btn{width:100%;padding:14px 0;background:linear-gradient(135deg,#1F4E79,#2B6BAE);color:#fff;font-size:16px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin:8px 0 16px}
+.calc-btn:active{opacity:.9}
+.reset-btn{width:100%;padding:10px 0;background:#F0F2F5;color:#666;font-size:14px;border:2px solid #DEE4EC;border-radius:8px;cursor:pointer;margin:0 0 20px}
+.reset-btn:active{background:#e0e2e5}
+.result-card{background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:8px}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.result-label{font-size:13px;color:#555}
+.result-value{font-size:15px;font-weight:700;color:#1F4E79}
+.result-value.highlight{color:#E65100}
+.result-divider{height:1px;background:#E8EDF3;margin:4px 0}
+.hint{display:block;font-size:11px;color:#999;text-align:center;margin-top:4px}
+.order-card{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:8px;padding:12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.order-num{width:24px;height:24px;border-radius:50%;background:#1F4E79;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px}
+.order-content{flex:1}
+.order-text{display:block;font-size:13px;color:#333;line-height:1.6}
+.order-tag{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:4px;font-size:10px;color:#fff;background:#8A9BB5}
+.actions{display:flex;gap:12px;margin:12px}
+.actions .calc-btn{margin:0;flex:1}
+.status-banner{padding:12px;border-radius:8px;text-align:center;font-size:13px;font-weight:700;color:#fff;margin-bottom:12px}
+.status-safe{background:#4caf50}
+.status-warning{background:#f57c00}
+.status-danger{background:#d32f2f}
+.speed-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.speed-table th{background:#1F4E79;color:#fff;padding:6px;font-size:11px}
+.speed-table td{padding:5px;text-align:center;border-bottom:1px solid #E8EDF3}
+.speed-table tr.highlight-row td{background:#FFF8E0;font-weight:700;color:#1F4E79}
+.tool-footer{text-align:center;padding:20px;font-size:12px;color:#8A9BB5}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:20px;font-size:14px;z-index:9999;opacity:0;animation:fadeInOut 2s}
+@keyframes fadeInOut{0%{opacity:0}15%{opacity:1}85%{opacity:1}100%{opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="page-home" id="pageHome">
+  <div class="home-header">
+    <div class="home-title">⚓ 航海计算</div>
+    <div class="home-sub">Navigation Calculator</div>
+  </div>
+  <div class="menu-grid" id="homeGrid"></div>
+</div>
+
+<div class="tool-page" data-page="eta" id="pageEta">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">⏳</div><div class="header-title">ETA 计算器</div><div class="header-sub">Navigational ETA Calculator</div></div>
+  <div class="section input-section"><div class="section-title">📅 当前日期时间</div>
+    <div class="row">
+      <div class="field"><div class="field-label">日期</div><div class="picker-input" id="e_d"></div></div>
+      <div class="field"><div class="field-label">时间</div><div class="picker-input" id="e_t"></div></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">🌐 时区</div>
+    <div class="row">
+      <div class="field"><div class="field-label">起始时区</div>
+        <select class="num-input yellow" id="e_su">
+          <option value="12">UTC+12</option><option value="11">UTC+11</option><option value="10">UTC+10</option><option value="9">UTC+9</option><option value="8">UTC+8</option><option value="7">UTC+7</option><option value="6">UTC+6</option><option value="5">UTC+5</option><option value="4">UTC+4</option><option value="3">UTC+3</option><option value="2">UTC+2</option><option value="1">UTC+1</option><option value="0">UTC+0</option><option value="-1">UTC-1</option><option value="-2">UTC-2</option><option value="-3">UTC-3</option><option value="-4">UTC-4</option><option value="-5">UTC-5</option><option value="-6">UTC-6</option><option value="-7">UTC-7</option><option value="-8">UTC-8</option><option value="-9">UTC-9</option><option value="-10">UTC-10</option><option value="-11">UTC-11</option><option value="-12">UTC-12</option>
+        </select>
+      </div>
+      <div class="field"><div class="field-label">目的时区</div>
+        <select class="num-input yellow" id="e_du">
+          <option value="12">UTC+12</option><option value="11">UTC+11</option><option value="10">UTC+10</option><option value="9">UTC+9</option><option value="8">UTC+8</option><option value="7">UTC+7</option><option value="6">UTC+6</option><option value="5">UTC+5</option><option value="4">UTC+4</option><option value="3">UTC+3</option><option value="2">UTC+2</option><option value="1">UTC+1</option><option value="0">UTC+0</option><option value="-1">UTC-1</option><option value="-2">UTC-2</option><option value="-3">UTC-3</option><option value="-4">UTC-4</option><option value="-5">UTC-5</option><option value="-6">UTC-6</option><option value="-7">UTC-7</option><option value="-8">UTC-8</option><option value="-9">UTC-9</option><option value="-10">UTC-10</option><option value="-11">UTC-11</option><option value="-12">UTC-12</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">🛳️ 航程参数</div>
+    <div class="row">
+      <div class="field"><div class="field-label">航程距离 (NM)</div><input class="num-input yellow" id="e_dist" type="number" step="any" placeholder="海里"></div>
+      <div class="field"><div class="field-label">航速 (kn)</div><input class="num-input" id="e_spd" type="number" step="any" placeholder="节"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">航行时间</div><input class="num-input" id="e_td" type="text" placeholder="天/时/分自动计算" readonly></div>
+      <div class="field"><div class="field-label">抵达时间 (LT)</div><input class="num-input" id="e_tt" type="text" placeholder="DD HH:MM" readonly></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cETA()">📊 计算 ETA</button>
+  <div class="section result-section" id="etaResults" style="display:none"><div class="section-title">📋 计算结果</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">航行时间</span><span class="result-value" id="e_td2"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">抵达时间 (目的地LT)</span><span class="result-value highlight" id="e_eta2"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">抵达时间 (UTC)</span><span class="result-value" id="e_eta_utc"></span></div>
+    </div>
+    <div class="section-title" style="margin-top:12px">⏱️ 航速速查表</div>
+    <table class="speed-table" id="e_tbl"></table>
+  </div>
+  <button class="reset-btn" onclick="rETA()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="night-orders" id="pageNight">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">📋</div><div class="header-title">Night Orders</div><div class="header-sub">Captain's Night Orders Generator</div></div>
+  <div class="section" style="border-left:4px solid #1F4E79">
+    <div class="row" style="justify-content:space-between">
+      <span class="field-label" id="no_date">📅 2026-05-29</span>
+      <span class="field-label" id="no_count" style="color:#999"></span>
+    </div>
+  </div>
+  <div class="section" id="no_list"></div>
+  <div class="actions">
+    <button class="calc-btn" onclick="genOrders()">🔄 换一批</button>
+    <button class="calc-btn" onclick="copyOrders()">📋 复制全部</button>
+  </div>
+  <button class="reset-btn" onclick="rNight()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="true-wind" id="pageWind">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">🌬️</div><div class="header-title">真风计算</div><div class="header-sub">True Wind Calculator</div></div>
+  <div class="section input-section"><div class="section-title">🚢 船舶运动</div>
+    <div class="row">
+      <div class="field"><div class="field-label">COG (°)</div><input class="num-input yellow" id="w_cog" type="number" step="any" placeholder="0-360"></div>
+      <div class="field"><div class="field-label">SOG (kn)</div><input class="num-input yellow" id="w_sog" type="number" step="any" placeholder="节"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">🌊 视风 (Apparent Wind)</div>
+    <div class="row">
+      <div class="field"><div class="field-label">视风向 (°)</div><input class="num-input yellow" id="w_awa" type="number" step="any" placeholder="相对船首方向"></div>
+      <div class="field"><div class="field-label">视风速 (kn)</div><input class="num-input yellow" id="w_aws" type="number" step="any" placeholder="节"></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cWind()">🧮 计算真风</button>
+  <div class="section result-section" id="windResults" style="display:none"><div class="section-title">📊 真风结果</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">真风向 (TWD)</span><span class="result-value highlight" id="w_twd"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">真风速 (TWS)</span><span class="result-value" id="w_tws"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">相对方向</span><span class="result-value" id="w_rel"></span></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="rWind()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="density-draft" id="pageDensity">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">🌊</div><div class="header-title">吃水密度修正</div><div class="header-sub">Density & Draft Correction</div></div>
+  <div class="section input-section"><div class="section-title">📏 当前状态</div>
+    <div class="row">
+      <div class="field"><div class="field-label">当前水密度 (t/m³)</div><input class="num-input yellow" id="d_d1" type="number" step="any" value="1.025"></div>
+      <div class="field"><div class="field-label">目标水密度 (t/m³)</div><input class="num-input yellow" id="d_d2" type="number" step="any" placeholder="输入目标密度"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">当前平均吃水 (m)</div><input class="num-input yellow" id="d_t" type="number" step="any" placeholder="m"></div>
+      <div class="field"><div class="field-label">TPC (t/cm)</div><input class="num-input" id="d_tpc" type="number" step="any" placeholder="吨/厘米"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">⚖️ 排水量 (用于首尾修正)</div>
+    <div class="row">
+      <div class="field"><div class="field-label">排水量 Δ (t)</div><input class="num-input" id="d_disp" type="number" step="any" placeholder="吨"></div>
+      <div class="field"><div class="field-label">LBP (m)</div><input class="num-input" id="d_lbp" type="number" step="any" placeholder="首尾柱间长"></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cDensity()">📊 计算吃水变化</button>
+  <div class="section result-section" id="denResults" style="display:none"><div class="section-title">📋 修正结果</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">吃水变化 (Δd)</span><span class="result-value highlight" id="d_dd"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">新平均吃水</span><span class="result-value" id="d_t2"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">新首吃水</span><span class="result-value" id="d_tf"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">新尾吃水</span><span class="result-value" id="d_ta"></span></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="rDensity()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="cargo-capacity" id="pageCargo">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">📦</div><div class="header-title">最大载货量</div><div class="header-sub">Maximum Cargo Capacity</div></div>
+  <div class="section input-section"><div class="section-title">⚓ 船舶参数</div>
+    <div class="row">
+      <div class="field"><div class="field-label">夏季排水量 (t)</div><input class="num-input yellow" id="c_ds" type="number" step="any" placeholder="Δ夏季"></div>
+      <div class="field"><div class="field-label">轻船重量 (t)</div><input class="num-input" id="c_lw" type="number" step="any" placeholder="Light Wt"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">常数 (t)</div><input class="num-input yellow" id="c_con" type="number" step="any" placeholder="Constant"></div>
+      <div class="field"><div class="field-label">消耗品 (t)</div><input class="num-input" id="c_cons" type="number" step="any" placeholder="消耗品"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">📐 密度修正</div>
+    <div class="row">
+      <div class="field"><div class="field-label">当前水密度 (t/m³)</div><input class="num-input yellow" id="c_d1" type="number" step="any" value="1.025"></div>
+      <div class="field"><div class="field-label">港口水密度 (t/m³)</div><input class="num-input yellow" id="c_d2" type="number" step="any" placeholder="装货港密度"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">TPC (t/cm)</div><input class="num-input" id="c_tpc" type="number" step="any" placeholder="吨/厘米"></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cCargo()">🧮 计算最大载货量</button>
+  <div class="section result-section" id="cargoResults" style="display:none"><div class="section-title">📋 载货量结果</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">最大载货量 (夏季)</span><span class="result-value highlight" id="c_cs"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">密度修正后载货量</span><span class="result-value" id="c_cd"></span></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="rCargo()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="fuel-consumption" id="pageFuel">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">⛽</div><div class="header-title">航次燃油计算</div><div class="header-sub">Bunker Calculator</div></div>
+  <div class="section input-section"><div class="section-title">🚢 航次信息</div>
+    <div class="row">
+      <div class="field"><div class="field-label">航次编号</div><input class="num-input" id="fu_vn" type="text" placeholder="Voyage No."></div>
+      <div class="field"><div class="field-label">往返</div>
+        <select class="num-input yellow" id="fu_dir"><option value="laden">重载 Laden</option><option value="ballast">压载 Ballast</option></select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">航程距离 (NM)</div><input class="num-input yellow" id="fu_dist" type="number" step="any" placeholder="海里"></div>
+      <div class="field"><div class="field-label">航速 (kn)</div><input class="num-input" id="fu_spd" type="number" step="any" placeholder="节"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">🔥 油耗率 (t/day)</div>
+    <div class="row">
+      <div class="field"><div class="field-label">HSFO (海上)</div><input class="num-input" id="fu_hsea" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">LSFO (海上)</div><input class="num-input" id="fu_lsea" type="number" step="any" placeholder="t/day"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">MGO (海上)</div><input class="num-input" id="fu_msea" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">港内 HSFO</div><input class="num-input" id="fu_hpor" type="number" step="any" placeholder="t/day"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">港内 LSFO</div><input class="num-input" id="fu_lpor" type="number" step="any" placeholder="t/day"></div>
+      <div class="field"><div class="field-label">港内 MGO</div><input class="num-input" id="fu_mpor" type="number" step="any" placeholder="t/day"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">📅 航行时间</div>
+    <div class="row">
+      <div class="field"><div class="field-label">海上航行 (天)</div><input class="num-input yellow" id="fu_sea_d" type="number" step="any" placeholder="天"></div>
+      <div class="field"><div class="field-label">港内作业 (天)</div><input class="num-input" id="fu_por_d" type="number" step="any" placeholder="天"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">安全余量 (%)</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input class="num-input" id="fu_mg" type="number" step="any" value="10" style="width:80px;flex:none">
+          <span style="font-size:13px;color:#666">%</span>
+        </div>
+      </div>
+      <div class="field"><span class="hint">默认10%安全余量</span></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cFuel()">🧮 计算燃油需求</button>
+  <div class="section result-section" id="fuelResults" style="display:none"><div class="section-title">📋 燃油计划</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">HSFO 需求</span><span class="result-value highlight" id="fu_h"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">LSFO 需求</span><span class="result-value" id="fu_l"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">MGO 需求</span><span class="result-value" id="fu_m"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">总燃油需求</span><span class="result-value" id="fu_t"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">安全余量</span><span class="result-value" id="fu_mgn"></span></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="rFuel()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="dew-point" id="pageDew">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">💧</div><div class="header-title">露点通风判断</div><div class="header-sub">Dew Point Ventilation</div></div>
+  <div class="section input-section"><div class="section-title">🌡️ 舱外 (Outside)</div>
+    <div class="row">
+      <div class="field"><div class="field-label">干球温度 (°C)</div><input class="num-input yellow" id="dw_od" type="number" step="any" placeholder="干球"></div>
+      <div class="field"><div class="field-label">湿球温度 (°C)</div><input class="num-input yellow" id="dw_ow" type="number" step="any" placeholder="湿球"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">🏠 舱内 (Inside)</div>
+    <div class="row">
+      <div class="field"><div class="field-label">干球温度 (°C)</div><input class="num-input yellow" id="dw_id" type="number" step="any" placeholder="干球"></div>
+      <div class="field"><div class="field-label">湿球温度 (°C)</div><input class="num-input yellow" id="dw_iw" type="number" step="any" placeholder="湿球"></div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cDew()">🧮 计算露点 & 判断通风</button>
+  <div class="section result-section" id="dewResults" style="display:none"><div class="section-title">📋 露点结果</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">舱外露点</span><span class="result-value" id="dw_odp"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">舱内露点</span><span class="result-value" id="dw_idp"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">通风判断</span><span class="result-value highlight" id="dw_st"></span></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="rDew()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<div class="tool-page" data-page="squat-calc" id="pageSquat">
+  <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">返回</span></button></div>
+  <div class="tool-header"><div class="header-icon">📏</div><div class="header-title">船舶下沉量</div><div class="header-sub">Squat & UKC Calculator</div></div>
+  <div class="section input-section"><div class="section-title">📐 船体参数</div>
+    <div class="row">
+      <div class="field"><div class="field-label">吃水 d (m)</div><input class="num-input yellow" id="s_dr" type="number" step="any" placeholder="Draft"></div>
+      <div class="field"><div class="field-label">水深 h (m)</div><input class="num-input yellow" id="s_dep" type="number" step="any" placeholder="Depth"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">航速 V (kn)</div><input class="num-input yellow" id="s_spd" type="number" step="any" placeholder="Speed"></div>
+      <div class="field"><div class="field-label">方形系数 Cb</div><input class="num-input" id="s_cb" type="number" step="any" placeholder="自动计算或手动"></div>
+    </div>
+  </div>
+  <div class="section input-section"><div class="section-title">🔩 Cb 自动计算（选填）</div>
+    <div class="row">
+      <div class="field"><div class="field-label">L (m)</div><input class="num-input" id="s_cl" type="number" step="any" placeholder="船长"></div>
+      <div class="field"><div class="field-label">B (m)</div><input class="num-input" id="s_cbw" type="number" step="any" placeholder="船宽"></div>
+    </div>
+    <div class="row">
+      <div class="field"><div class="field-label">d (m)</div><input class="num-input" id="s_cbd" type="number" step="any" placeholder="吃水"></div>
+      <div class="field"><div class="field-label">Δ (t)</div><input class="num-input" id="s_cdisp" type="number" step="any" placeholder="排水量"></div>
+    </div>
+    <button class="calc-btn" onclick="calcCb()">🔢 计算 Cb</button>
+  </div>
+  <div class="section input-section"><div class="section-title">🌊 水道类型</div>
+    <div class="row">
+      <div class="field">
+        <select class="num-input yellow" id="s_wt">
+          <option value="open">开阔水道 Open Water</option>
+          <option value="restricted">受限水道 Restricted</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button class="calc-btn" onclick="cSquat()">📊 计算下沉量 & UKC</button>
+  <div class="section result-section" id="squatResults" style="display:none"><div class="section-title">📋 下沉量结果</div>
+    <div class="result-card">
+      <div class="result-row"><span class="result-label">UKC 当前 (m)</span><span class="result-value" id="s_pukc"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">Squat (m)</span><span class="result-value highlight" id="s_sq"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">UKC 动态 (m)</span><span class="result-value" id="s_ukc"></span></div>
+      <div class="result-divider"></div>
+      <div class="result-row"><span class="result-label">评估</span><span class="result-value" id="s_st"></span></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="rSquat()">↻ 重置</button>
+  <div class="tool-footer">Captain LZH</div>
+</div>
+
+<script>
+var MENU = [
+  {id:"eta",icon:"⏳",color:"blue",label:"ETA计算器",desc:"航速/距离/时间/ETA"},
+  {id:"night-orders",icon:"📋",color:"dark",label:"夜航命令",desc:"Night Orders 一键生成"},
+  {id:"true-wind",icon:"🌬️",color:"teal",label:"真风计算",desc:"真风风向/风速计算"},
+  {id:"density-draft",icon:"🌊",color:"cyan",label:"吃水密度修正",desc:"水密度变化→首尾吃水"},
+  {id:"cargo-capacity",icon:"📦",color:"green",label:"最大载货量",desc:"排水量/轻船/常数/消耗品"},
+  {id:"fuel-consumption",icon:"⛽",color:"orange",label:"航次燃油计算",desc:"海上段/港内段/ROB"},
+  {id:"dew-point",icon:"💧",color:"purple",label:"露点通风判断",desc:"干湿球温度→通风决策"},
+  {id:"squat-calc",icon:"📏",color:"brown",label:"下沉量计算",desc:"Squat / UKC 计算"}
+];
+
+function $(id){return document.getElementById(id)}
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},2000)}
+
+// localStorage helpers
+function ld(k,d){try{return localStorage.getItem('nc_'+k)||d}catch(e){return d}}
+function ls(k,v){try{localStorage.setItem('nc_'+k,v)}catch(e){}}
+
+// Page navigation
+function showPage(id){
+  document.querySelectorAll('.tool-page').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('pageHome').style.display='none';
+  if(id==='home'){
+    document.getElementById('pageHome').style.display='flex';
+    return;
+  }
+  var page=document.getElementById('page'+id.charAt(0).toUpperCase()+id.slice(1));
+  if(page){page.classList.add('active')}
+  window.scrollTo(0,0);
+}
+
+// Render home grid
+function renderHome(){
+  var g=$('homeGrid'),h='';
+  for(var i=0;i<MENU.length;i++){
+    var m=MENU[i];
+    h+='<div class="menu-item" onclick="showPage(\''+m.id+'\')">'
+      +'<div class="menu-icon icon-'+m.color+'">'+m.icon+'</div>'
+      +'<div class="menu-label">'+m.label+'</div>'
+      +'<div class="menu-desc">'+m.desc+'</div></div>';
+  }
+  g.innerHTML=h;
+}
+
+// ===== ETA =====
+function rETA(){
+  var n=new Date();
+  $('e_d').textContent=ld('e_d',n.toISOString().split('T')[0]);
+  $('e_t').textContent=ld('e_t',String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'));
+  $('e_su').value=ld('e_su','8');
+  $('e_du').value=ld('e_du','8');
+  $('e_dist').value=ld('e_dist','');
+  $('e_spd').value=ld('e_spd','');
+  $('e_td').value=ld('e_td','');
+  $('e_tt').value=ld('e_tt','');
+}
+
+function cETA(){
+  var d=$('e_d').textContent,t=$('e_t').textContent;
+  var su=parseInt($('e_su').value),du=parseInt($('e_du').value);
+  var dist=parseFloat($('e_dist').value),spd=parseFloat($('e_spd').value);
+  if(!d||!t||isNaN(dist)||isNaN(spd)){toast('请填写完整');return}
+  var parts=d.split('-');
+  var dt=new Date(parts[0],parts[1]-1,parts[2],t.split(':')[0],t.split(':')[1]);
+  var h=dist/spd;
+  var days=Math.floor(h/24),hrs=Math.floor(h%24),mins=Math.round((h%1)*60);
+  var tdStr=days+'天 '+hrs+'时 '+mins+'分';
+  $('e_td').value=tdStr;$('e_td2').textContent=tdStr;
+  var utc=new Date(dt.getTime()-su*3600000);
+  var eta=new Date(utc.getTime()+du*3600000+h*3600000);
+  var etaStr=eta.getDate()+'日 '+String(eta.getHours()).padStart(2,'0')+':'+String(eta.getMinutes()).padStart(2,'0');
+  $('e_eta2').textContent=etaStr;$('e_tt').value=etaStr;
+  var etaUtc=new Date(utc.getTime()+h*3600000);
+  $('e_eta_utc').textContent=etaUtc.toISOString().replace('T',' ').substr(0,16);
+  // Speed table
+  var html='<tr><th>航速(kn)</th><th>航行时间</th><th>ETA (目的地LT)</th></tr>';
+  var base=Math.round(spd*2)/2;
+  for(var s=base-2;s<=base+2;s+=0.5){
+    if(s<=0)continue;
+    var h2=dist/s,d2=Math.floor(h2/24),h3=Math.floor(h2%24),m2=Math.round((h2%1)*60);
+    var tStr=d2+'d '+h3+'h '+m2+'m';
+    var e2=new Date(utc.getTime()+du*3600000+h2*3600000);
+    var eStr=e2.getDate()+'日 '+String(e2.getHours()).padStart(2,'0')+':'+String(e2.getMinutes()).padStart(2,'0');
+    var cls=s===spd?' class="highlight-row"':'';
+    html+='<tr'+cls+'><td>'+s.toFixed(1)+'</td><td>'+tStr+'</td><td>'+eStr+'</td></tr>';
+  }
+  $('e_tbl').innerHTML=html;
+  $('etaResults').style.display='block';
+  ls('e_d',d);ls('e_t',t);ls('e_su',$('e_su').value);ls('e_du',$('e_du').value);
+  ls('e_dist',dist);ls('e_spd',spd);
+}
+
+// ===== Night Orders =====
+var ORDERS=[
+  {cat:"航路",text:"本航次航路已标注在海图上，值班驾驶员应熟记转向点和航向。"},
+  {cat:"航路",text:"注意避开禁航区和浅水区，严格按照计划航线行驶。"},
+  {cat:"航路",text":"接近转向点时提前核对船位，确认无误后方可改向。"},
+  {cat:"航路",text":"沿岸航行时保持安全距离，注意渔网和渔船。"},
+  {cat:"航路",text":"通过分道通航制区域时严格遵守通航规则。"},
+  {cat:"瞭望",text:"加强瞭望，严格遵守国际海上避碰规则。"},
+  {cat:"瞭望",text:"雾航时开启雷达，鸣放雾号，减速备车航行。"},
+  {cat:"瞭望",text":"夜间航行时尤其注意小船和漂浮物。"},
+  {cat:"瞭望",text:"保持VHF CH16不间断守听。"},
+  {cat:"瞭望",text:"值班期间严禁使用手机做与值班无关的事。"},
+  {cat:"瞭望",text:"发现异常灯光或不明目标立即报告船长。"},
+  {cat:"船位",text:"每班至少进行一次天文定位或GPS核对。"},
+  {cat:"船位",text:"进入狭水道或航道时加大定位频次。"},
+  {cat:"船位",text:"交接班时必须核对船位和航向。"},
+  {cat:"船位",text:"使用多种定位方法（GPS、雷达、目测）交叉验证船位。"},
+  {cat:"船位",text":"每班交接时记录准确船位于航海日志。"},
+  {cat:"主机",text:"主机转速和负荷严格按机舱要求执行，不得擅自加减车。"},
+  {cat:"主机",text:"如遇主机故障或异常立即停车并报告船长。"},
+  {cat:"主机",text:"机动航行时提前通知机舱备车。"},
+  {cat:"主机",text:"换油操作需提前通知机舱，确认油品切换完成后方可进入排放控制区。"},
+  {cat:"主机",text:"备车航行期间加强主机参数监控。"},
+  {cat:"安全",text:"如遇紧急情况立即采取行动并报告船长，不要犹豫。"},
+  {cat:"安全",text:"消防救生设备保持随时可用状态。"},
+  {cat:"安全",text:"晚间安全巡视按照巡回检查路线严格执行。"},
+  {cat:"安全",text:"进入密闭舱室必须填写许可证并按程序进行气体检测。"},
+  {cat:"安全",text:"雷雨天气注意关闭非必要电子设备，防止雷击。"},
+  {cat:"值班",text:"值班驾驶员和水手不得擅离职守。"},
+  {cat:"值班",text:"航行灯、信号灯按规定开启，每日日落时检查。"},
+  {cat:"值班",text:"自动舵与手动舵按规范切换，每次切换记录在航海日志。"},
+  {cat:"值班",text:"大风浪天气注意人身安全，甲板作业必须穿戴救生衣和安全绳。"},
+  {cat:"值班",text:"值班期间保持驾驶台秩序，无关人员不得进入。"},
+  {cat:"油污",text:"严禁任何形式的油污排放，垃圾按分类要求处理。"},
+  {cat:"油污",text:"加油作业期间全程值守，防止跑油。"},
+  {cat:"油污",text:"压载水排放须符合公约要求并记录。"},
+  {cat:"油污",text:"机舱污水必须经油水分离器处理后方可排放。"},
+  {cat:"通信",text:"按时接收气象传真和航行警告，张贴在驾驶台公告栏。"},
+  {cat:"通信",text:"测试应急无线电示位标（EPIRB）是否在正常位置。"},
+  {cat:"通信",text:"卫星通信设备保持开机状态，以便随时联系。"},
+  {cat:"通信",text:"每天按时收发船位报和气象报。"},
+  {cat:"装卸",text:"装卸货期间每2小时检查水尺和船体倾斜情况。"},
+  {cat:"装卸",text:"装卸货期间注意调整压载水，保持合适吃水和纵倾。"},
+  {cat:"装卸",text:"装卸货期间值班驾驶员监仓，拍照留底。"},
+  {cat:"装卸",text:"危险品装卸需严格核对清单和积载位置。"},
+  {cat:"装卸",text:"大副应在每日0600和1800向驾驶台报告货舱状况。"},
+  {cat:"冰区",text:"冰区航行时使用安全航速，注意避开大块浮冰。"},
+  {cat:"冰区",text:"注意船体振动和螺旋桨噪音，疑似冰击立即报告。"},
+  {cat:"冰区",text:"冰区航行时压载水舱适当增加压载以加强船体强度。"},
+  {cat:"冰区",text:"破冰船引航时保持安全距离，服从破冰船指挥。"},
+  {cat:"引水",text:"引航员登船时做好安全措施，放好引水梯和舷灯。"},
+  {cat:"引水",text:"引航员在船期间值班驾驶员配合操作，保持独立核查。"},
+  {cat:"引水",text:"引航员离船后及时调整至计划航向并报告船长。"},
+  {cat:"驾驶台",text:"驾驶台航行设备（雷达、GPS、AIS、ECDIS）保持良好工作状态。"},
+  {cat:"驾驶台",text:"舵机间每班巡视检查，确认设备正常。"},
+  {cat:"驾驶台",text:"磁罗经和陀螺罗经每班核对自差和误差。"},
+  {cat:"驾驶台",text:"航海日志填写应完整、准确、及时，不得提前或补填。"},
+  {cat:"驾驶台",text:"电子海图和纸质海图同时更新，确认一致。"},
+  {cat:"机舱",text:"风浪天气注意机舱温度及通风口是否进水。"},
+  {cat:"机舱",text:"主机缸套水温度和滑油压力异常立即通知轮机长。"},
+  {cat:"机舱",text:"舵机每班测试一次并记录。"},
+  {cat:"机舱",text:"锅炉和废气锅炉运行参数每班记录。"},
+  {cat:"系泊",text:"靠泊期间梯口值班不得间断，登轮人员核对证件。"},
+  {cat:"系泊",text:"系泊缆绳受力均匀，潮水变化时及时调整。"},
+  {cat:"系泊",text:"舷梯和安全网必须按规范放置，夜间照明充足。"},
+  {cat:"系泊",text:"靠离泊时驾驶台与船头船尾保持通信畅通。"},
+  {cat:"医疗",text:"如有船员身体不适，及时报告船长并启动医疗程序。"},
+  {cat:"医疗",text:"药品柜定期检查，急救药品保持齐全。"}
+];
+
+function hashDate(d){
+  var s=d.split('-').join(''),h=0;
+  for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))&0x7fffffff}
+  return h;
+}
+
+function seededShuffle(arr, seed){
+  var a=arr.slice(),s=seed;
+  for(var i=a.length-1;i>0;i--){
+    s=(s*1103515245+12345)&0x7fffffff;
+    var j=s%(i+1),t=a[i];a[i]=a[j];a[j]=t;
+  }
+  return a;
+}
+
+function genOrders(){
+  var n=new Date(),d=$('no_date');
+  var dateStr=n.toISOString().split('T')[0];
+  d.textContent='📅 '+dateStr;
+  var seed=hashDate(dateStr);
+  var shuffled=seededShuffle(ORDERS,seed);
+  var pick=shuffled.slice(0,6);
+  var html='';
+  for(var i=0;i<pick.length;i++){
+    var o=pick[i],colors={航路:'#1F4E79',瞭望:'#2E7D32',船位:'#F57C00',主机:'#C62828',安全:'#D32F2F',值班:'#6A1B9A',油污:'#00695C',通信:'#1565C0',装卸:'#E65100',冰区:'#00838F',引水:'#4E342E',驾驶台:'#37474F',机舱:'#B71C1C',系泊:'#4527A0',医疗:'#78909C'};
+    html+='<div class="order-card"><div class="order-num">'+(i+1)+'</div>'
+      +'<div class="order-content"><span class="order-text">'+o.text+'</span>'
+      +'<span class="order-tag" style="background:'+(colors[o.cat]||'#8A9BB5')+'">'+o.cat+'</span></div></div>';
+  }
+  $('no_list').innerHTML=html;
+  $('no_count').textContent=pick.length+' items';
+}
+
+function copyOrders(){
+  var n=$('no_list').querySelectorAll('.order-text');
+  if(!n.length){toast('请先生成命令');return}
+  var txt='📋 Night Orders - '+new Date().toISOString().split('T')[0]+'\n';
+  for(var i=0;i<n.length;i++){txt+=(i+1)+'. '+n[i].textContent+'\n'}
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){toast('已复制 '+n.length+' 条命令')})}
+  else{toast('复制失败，请手动复制')}
+}
+
+function rNight(){genOrders()}
+
+// ===== True Wind =====
+function rWind(){
+  $('w_cog').value=ld('w_cog','');
+  $('w_sog').value=ld('w_sog','');
+  $('w_awa').value=ld('w_awa','');
+  $('w_aws').value=ld('w_aws','');
+  $('windResults').style.display='none';
+}
+
+function cWind(){
+  var cog=parseFloat($('w_cog').value),sog=parseFloat($('w_sog').value);
+  var awa=parseFloat($('w_awa').value),aws=parseFloat($('w_aws').value);
+  if(isNaN(cog)||isNaN(sog)||isNaN(awa)||isNaN(aws)){toast('请填写完整');return}
+  var cr=cog*Math.PI/180;
+  var sx=sog*Math.sin(cr),sy=sog*Math.cos(cr);
+  var ar=awa*Math.PI/180;
+  var ax=aws*Math.sin(ar),ay=aws*Math.cos(ar);
+  var twx=ax-sx,twy=ay-sy;
+  var tws=Math.sqrt(twx*twx+twy*twy);
+  var twd=Math.atan2(twx,twy)*180/Math.PI;
+  if(twd<0)twd+=360;
+  $('w_twd').textContent=twd.toFixed(1)+'°';
+  $('w_tws').textContent=tws.toFixed(1)+' kn';
+  // Relative direction
+  var rel=awa;
+  if(rel>180)rel-=360;
+  var relStr='';
+  if(Math.abs(rel)<10)relStr='船首风 (Head Wind)';
+  else if(rel>10&&rel<80)relStr='左舷受风 (Port Bow, '+rel.toFixed(0)+'°)';
+  else if(rel>=80&&rel<=100)relStr='左正横风 (Port Beam)';
+  else if(rel>100&&rel<170)relStr='左舷尾风 (Port Quarter, '+rel.toFixed(0)+'°)';
+  else if(Math.abs(rel)>=170)relStr='顺风 (Following Wind)';
+  else if(rel<-10&&rel>-80)relStr='右舷受风 (Starboard Bow, '+(-rel).toFixed(0)+'°)';
+  else if(rel<=-80&&rel>=-100)relStr='右正横风 (Starboard Beam)';
+  else if(rel<-100&&rel>-170)relStr='右舷尾风 (Starboard Quarter, '+(-rel).toFixed(0)+'°)';
+  $('w_rel').textContent=relStr;
+  $('windResults').style.display='block';
+  ls('w_cog',cog);ls('w_sog',sog);ls('w_awa',awa);ls('w_aws',aws);
+}
+
+// ===== Density =====
+function rDensity(){
+  $('d_d1').value=ld('d_d1','1.025');
+  $('d_d2').value=ld('d_d2','');
+  $('d_t').value=ld('d_t','');
+  $('d_tpc').value=ld('d_tpc','');
+  $('d_disp').value=ld('d_disp','');
+  $('d_lbp').value=ld('d_lbp','');
+  $('denResults').style.display='none';
+}
+
+function cDensity(){
+  var d1=parseFloat($('d_d1').value),d2=parseFloat($('d_d2').value);
+  var t=parseFloat($('d_t').value),tpc=parseFloat($('d_tpc').value);
+  var disp=parseFloat($('d_disp').value),lbp=parseFloat($('d_lbp').value);
+  if(isNaN(d1)||isNaN(d2)||isNaN(t)||isNaN(tpc)){toast('请填写完整');return}
+  var dd=t*(d1/d2-1);
+  if(!isNaN(tpc)){dd=dd/tpc*100}
+  $('d_dd').textContent=(d1!==d2?((d1-d2)*1000).toFixed(1):'—')+' kg/m³ ('+dd.toFixed(2)+' m)';
+  var t2=t+dd;
+  $('d_t2').textContent=t2.toFixed(2)+' m';
+  if(!isNaN(disp)&&!isNaN(lbp)&&lbp>0){
+    var trim=disp*dd*0.01/lbp;
+    $('d_tf').textContent=(t2+trim/2).toFixed(2)+' m';
+    $('d_ta').textContent=(t2-trim/2).toFixed(2)+' m';
+  }else{
+    $('d_tf').textContent='—';
+    $('d_ta').textContent='—';
+  }
+  $('denResults').style.display='block';
+  ls('d_d1',d1);ls('d_d2',d2);ls('d_t',t);ls('d_tpc',tpc);ls('d_disp',disp);ls('d_lbp',lbp);
+}
+
+// ===== Cargo =====
+function rCargo(){
+  $('c_ds').value=ld('c_ds','');
+  $('c_lw').value=ld('c_lw','');
+  $('c_con').value=ld('c_con','');
+  $('c_cons').value=ld('c_cons','');
+  $('c_d1').value=ld('c_d1','1.025');
+  $('c_d2').value=ld('c_d2','');
+  $('c_tpc').value=ld('c_tpc','');
+  $('cargoResults').style.display='none';
+}
+
+function cCargo(){
+  var ds=parseFloat($('c_ds').value),lw=parseFloat($('c_lw').value);
+  var con=parseFloat($('c_con').value),cons=parseFloat($('c_cons').value);
+  var d1=parseFloat($('c_d1').value),d2=parseFloat($('c_d2').value);
+  var tpc=parseFloat($('c_tpc').value);
+  if(isNaN(ds)||isNaN(lw)||isNaN(con)||isNaN(cons)){toast('请填写完整');return}
+  var cs=ds-lw-con-cons;
+  $('c_cs').textContent=cs.toFixed(2)+' t';
+  if(!isNaN(d1)&&!isNaN(d2)&&d1!==d2){
+    var cd=cs*d2/d1;
+    if(!isNaN(tpc)&&tpc>0){
+      var dd=cs*(1/d1-1/d2)*100/tpc;
+      cd=cs+dd*tpc*0.01;
+    }
+    $('c_cd').textContent=cd.toFixed(2)+' t';
+  }else{
+    $('c_cd').textContent='—';
+  }
+  $('cargoResults').style.display='block';
+  ls('c_ds',ds);ls('c_lw',lw);ls('c_con',con);ls('c_cons',cons);ls('c_d1',d1);ls('c_d2',d2);ls('c_tpc',tpc);
+}
+
+// ===== Fuel =====
+function rFuel(){
+  $('fu_vn').value=ld('fu_vn','');
+  $('fu_dir').value=ld('fu_dir','laden');
+  $('fu_dist').value=ld('fu_dist','');
+  $('fu_spd').value=ld('fu_spd','');
+  $('fu_hsea').value=ld('fu_hsea','');
+  $('fu_lsea').value=ld('fu_lsea','');
+  $('fu_msea').value=ld('fu_msea','');
+  $('fu_hpor').value=ld('fu_hpor','');
+  $('fu_lpor').value=ld('fu_lpor','');
+  $('fu_mpor').value=ld('fu_mpor','');
+  $('fu_sea_d').value=ld('fu_sea_d','');
+  $('fu_por_d').value=ld('fu_por_d','');
+  $('fu_mg').value=ld('fu_mg','10');
+  $('fuelResults').style.display='none';
+}
+
+function cFuel(){
+  var dist=parseFloat($('fu_dist').value),spd=parseFloat($('fu_spd').value);
+  var hsea=parseFloat($('fu_hsea').value),lsea=parseFloat($('fu_lsea').value),msea=parseFloat($('fu_msea').value);
+  var hpor=parseFloat($('fu_hpor').value),lpor=parseFloat($('fu_lpor').value),mpor=parseFloat($('fu_mpor').value);
+  var sea_d=parseFloat($('fu_sea_d').value),por_d=parseFloat($('fu_por_d').value);
+  var mg=parseFloat($('fu_mg').value)||10;
+  if(isNaN(sea_d))sea_d=0;
+  if(isNaN(por_d))por_d=0;
+  if(sea_d===0&&dist>0&&spd>0)sea_d=dist/spd/24;
+  $('fu_sea_d').value=sea_d.toFixed(2);
+  var h=((hsea||0)*sea_d+(hpor||0)*por_d)*(1+mg/100);
+  var l=((lsea||0)*sea_d+(lpor||0)*por_d)*(1+mg/100);
+  var m=((msea||0)*sea_d+(mpor||0)*por_d)*(1+mg/100);
+  $('fu_h').textContent=h.toFixed(2)+' t';
+  $('fu_l').textContent=l.toFixed(2)+' t';
+  $('fu_m').textContent=m.toFixed(2)+' t';
+  $('fu_t').textContent=(h+l+m).toFixed(2)+' t';
+  $('fu_mgn').textContent=mg.toFixed(0)+'%';
+  $('fuelResults').style.display='block';
+  ls('fu_vn',$('fu_vn').value);ls('fu_dir',$('fu_dir').value);ls('fu_dist',dist);ls('fu_spd',spd);
+  ls('fu_hsea',hsea);ls('fu_lsea',lsea);ls('fu_msea',msea);ls('fu_hpor',hpor);ls('fu_lpor',lpor);ls('fu_mpor',mpor);
+  ls('fu_sea_d',sea_d);ls('fu_por_d',por_d);ls('fu_mg',mg);
+}
+
+// ===== Dew Point =====
+function rDew(){
+  $('dw_od').value=ld('dw_od','');
+  $('dw_ow').value=ld('dw_ow','');
+  $('dw_id').value=ld('dw_id','');
+  $('dw_iw').value=ld('dw_iw','');
+  $('dewResults').style.display='none';
+}
+
+function dewPoint(td,tw){
+  var A=17.27,B=237.7;
+  var gamma=Math.log(Math.exp(17.27*tw/(tw+237.7))>0?0.01:0.01);
+  // Simplified: use approximation
+  var rh=100*Math.exp(17.27*tw/(tw+237.7)-17.27*td/(td+237.7));
+  var dp=(237.7*Math.log(rh/100)+17.27*td)/(17.27-Math.log(rh/100));
+  return dp;
+}
+
+function cDew(){
+  var od=parseFloat($('dw_od').value),ow=parseFloat($('dw_ow').value);
+  var id=parseFloat($('dw_id').value),iw=parseFloat($('dw_iw').value);
+  if(isNaN(od)||isNaN(ow)||isNaN(id)||isNaN(iw)){toast('请填写完整');return}
+  var odp=dewPoint(od,ow),idp=dewPoint(id,iw);
+  $('dw_odp').textContent=odp.toFixed(1)+'°C';
+  $('dw_idp').textContent=idp.toFixed(1)+'°C';
+  var st=$('dw_st');
+  st.style.background='';
+  if(idp<=odp-2){
+    st.textContent='✅ 可以通风 (舱内露点低于舱外2°C以上)';
+    st.style.background='#4caf50';st.style.color='#fff';
+  }else if(idp<=odp){
+    st.textContent='⚠️ 谨慎通风 (舱内露点略低于舱外)';
+    st.style.background='#f57c00';st.style.color='#fff';
+  }else{
+    st.textContent='⛔ 禁止通风 (舱内露点高于舱外, 避免结露)';
+    st.style.background='#d32f2f';st.style.color='#fff';
+  }
+  st.style.cssText+='padding:12px;border-radius:8px;text-align:center;font-size:13px;font-weight:700';
+  $('dewResults').style.display='block';
+  ls('dw_od',od);ls('dw_ow',ow);ls('dw_id',id);ls('dw_iw',iw);
+}
+
+// ===== Squat =====
+function rSquat(){
+  $('s_dr').value=ld('s_dr','');
+  $('s_dep').value=ld('s_dep','');
+  $('s_spd').value=ld('s_spd','');
+  $('s_cb').value=ld('s_cb','');
+  $('s_wt').value=ld('s_wt','open');
+  $('s_cl').value='';$('s_cbw').value='';$('s_cbd').value='';$('s_cdisp').value='';
+  $('squatResults').style.display='none';
+  ['s_dr','s_dep','s_spd','s_cb'].forEach(function(i){var e=$(i);if(e)e.value=ld(i,'')});
+  $('s_wt').value=ld('s_wt','open');
+  ['s_dr','s_dep'].forEach(function(i){$(i).addEventListener('input',function(){
+    var dr=parseFloat($('s_dr').value),dep=parseFloat($('s_dep').value);
+    if(dr&&dep&&dep>dr)$('s_pukc').textContent=(dep-dr).toFixed(2)+' m';
+    else $('s_pukc').textContent='—';
+  })});
+}
+
+function calcCb(){
+  var L=parseFloat($('s_cl').value),B=parseFloat($('s_cbw').value);
+  var d=parseFloat($('s_cbd').value),disp=parseFloat($('s_cdisp').value);
+  if(isNaN(L)||isNaN(B)||isNaN(d)||isNaN(disp)){toast('请填写完整');return}
+  var cb=disp/1.025/(L*B*d);
+  $('s_cb').value=cb.toFixed(3);
+  toast('Cb = '+cb.toFixed(3));
+}
+
+function cSquat(){
+  var dr=parseFloat($('s_dr').value),dep=parseFloat($('s_dep').value);
+  var spd=parseFloat($('s_spd').value),cb=parseFloat($('s_cb').value);
+  if(isNaN(dr)||isNaN(dep)||isNaN(spd)||isNaN(cb)){toast('请填写完整');return}
+  if(dr>=dep){toast('吃水超过水深！');return}
+  var ukcB=dep-dr;
+  var ht=dep/dr;
+  var sq=cb*spd*spd/100;
+  if($('s_wt').value==='restricted')sq=cb*spd*spd/50;
+  sq=Math.max(sq,0.01);
+  var nd=dr+sq,ukcA=dep-nd;
+  var st='',sc='';
+  if(ukcA<0.5){sc='danger';st='⛔ CRITICAL UKC < 0.5m! Reduce speed!';}
+  else if(ukcA<1.0){sc='warning';st='⚠ MARGINAL UKC: '+ukcA.toFixed(2)+'m. Proceed with caution.';}
+  else{sc='safe';st='✅ SAFE UKC: '+ukcA.toFixed(2)+'m.';}
+  $('s_pukc').textContent=ukcB.toFixed(2)+' m';
+  $('s_sq').textContent=sq.toFixed(3)+' m';
+  $('s_ukc').textContent=ukcA.toFixed(2)+' m';
+  var stEl=$('s_st');
+  stEl.textContent=st;
+  stEl.className='status-banner status-'+sc;
+  $('squatResults').style.display='block';
+  ls('s_dr',dr);ls('s_dep',dep);ls('s_spd',spd);ls('s_cb',cb);ls('s_wt',$('s_wt').value);
+}
+
+// ===== Initialize =====
+function initApp(){
+  renderHome();
+  document.getElementById('pageHome').style.display='flex';
+  // ETA
+  var n=new Date();
+  $('e_d').textContent=ld('e_d',n.toISOString().split('T')[0]);
+  $('e_t').textContent=ld('e_t',String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'));
+  $('e_su').value=ld('e_su','8');
+  $('e_du').value=ld('e_du','8');
+  $('e_dist').value=ld('e_dist','');
+  $('e_spd').value=ld('e_spd','');
+  // Wind
+  $('w_cog').value=ld('w_cog','');
+  $('w_sog').value=ld('w_sog','');
+  $('w_awa').value=ld('w_awa','');
+  $('w_aws').value=ld('w_aws','');
+  // Density
+  $('d_d1').value=ld('d_d1','1.025');
+  $('d_d2').value=ld('d_d2','');
+  $('d_t').value=ld('d_t','');
+  $('d_tpc').value=ld('d_tpc','');
+  $('d_disp').value=ld('d_disp','');
+  $('d_lbp').value=ld('d_lbp','');
+  // Cargo
+  $('c_ds').value=ld('c_ds','');
+  $('c_lw').value=ld('c_lw','');
+  $('c_con').value=ld('c_con','');
+  $('c_cons').value=ld('c_cons','');
+  $('c_d1').value=ld('c_d1','1.025');
+  $('c_d2').value=ld('c_d2','');
+  $('c_tpc').value=ld('c_tpc','');
+  // Fuel
+  $('fu_vn').value=ld('fu_vn','');
+  $('fu_dir').value=ld('fu_dir','laden');
+  $('fu_dist').value=ld('fu_dist','');
+  $('fu_spd').value=ld('fu_spd','');
+  $('fu_hsea').value=ld('fu_hsea','');
+  $('fu_lsea').value=ld('fu_lsea','');
+  $('fu_msea').value=ld('fu_msea','');
+  $('fu_hpor').value=ld('fu_hpor','');
+  $('fu_lpor').value=ld('fu_lpor','');
+  $('fu_mpor').value=ld('fu_mpor','');
+  $('fu_sea_d').value=ld('fu_sea_d','');
+  $('fu_por_d').value=ld('fu_por_d','');
+  $('fu_mg').value=ld('fu_mg','10');
+  // Dew
+  $('dw_od').value=ld('dw_od','');
+  $('dw_ow').value=ld('dw_ow','');
+  $('dw_id').value=ld('dw_id','');
+  $('dw_iw').value=ld('dw_iw','');
+  // Squat
+  $('s_dr').value=ld('s_dr','');
+  $('s_dep').value=ld('s_dep','');
+  $('s_spd').value=ld('s_spd','');
+  $('s_cb').value=ld('s_cb','');
+  $('s_wt').value=ld('s_wt','open');
+  // Night orders
+  genOrders();
+  // Squat listeners
+  ['s_dr','s_dep'].forEach(function(i){$(i).addEventListener('input',function(){
+    var dr=parseFloat($('s_dr').value),dep=parseFloat($('s_dep').value);
+    if(dr&&dep&&dep>dr)$('s_pukc').textContent=(dep-dr).toFixed(2)+' m';
+    else $('s_pukc').textContent='—';
+  })});
+}
+
+window.addEventListener('DOMContentLoaded',initApp);
+
+// PWA
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(e){})});
+}
+</script>
+</body>
+</html>
