@@ -416,8 +416,8 @@ function showPage(id){
     document.getElementById('pageHome').style.display='flex';
     return;
   }
-  var map={eta:'pageEta',night:'pageNight',wind:'pageWind',density:'pageDensity',cargo:'pageCargo',fuel:'pageFuel',dew:'pageDew',squat:'pageSquat'};
-  var pid=map[id.split('-')[0]]||('page'+id.charAt(0).toUpperCase()+id.slice(1));
+  var map={'eta':'pageEta','night-orders':'pageNight','true-wind':'pageWind','density-draft':'pageDensity','cargo-capacity':'pageCargo','fuel-consumption':'pageFuel','dew-point':'pageDew','squat-calc':'pageSquat'};
+  var pid=map[id]||('page'+id.charAt(0).toUpperCase()+id.slice(1));
   var page=document.getElementById(pid);
   if(page){page.classList.add('active')}
   window.scrollTo(0,0);
