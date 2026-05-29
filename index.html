@@ -416,7 +416,9 @@ function showPage(id){
     document.getElementById('pageHome').style.display='flex';
     return;
   }
-  var page=document.getElementById('page'+id.charAt(0).toUpperCase()+id.slice(1));
+  var map={eta:'pageEta',night:'pageNight',wind:'pageWind',density:'pageDensity',cargo:'pageCargo',fuel:'pageFuel',dew:'pageDew',squat:'pageSquat'};
+  var pid=map[id.split('-')[0]]||('page'+id.charAt(0).toUpperCase()+id.slice(1));
+  var page=document.getElementById(pid);
   if(page){page.classList.add('active')}
   window.scrollTo(0,0);
 }
