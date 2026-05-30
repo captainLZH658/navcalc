@@ -707,17 +707,17 @@ function cETA(){
   // Speed lookup table
   var avg=Math.round(spd*2)/2;
   var st=Math.max(1,avg-2);
-  var html='<div class="table"><div class="table-header"><div class="th speed">Speed</div><div class="th eta">ETA(LT)</div><div class="th day">Day</div></div><div class="table-body">';
+  var html='<table class="speed-table"><thead><tr><th>Speed (kn)</th><th>ETA (LT)</th><th>Day</th></tr></thead><tbody>';
   for(var i=0;i<9;i++){
     var s=st+i*0.5;if(s<=0)continue;
     var eU=new Date(utc.getTime()+(dist/s)*3600000);
     var eL=new Date(eU.getTime()+du*3600000);
     var isA=Math.abs(s-avg)<0.01;
-    var rc=isA?'table-row row-avg':'table-row';
+    var rc=isA?'highlight-row':'';
     var es=String(eL.getMonth()+1).padStart(2,'0')+'-'+String(eL.getDate()).padStart(2,'0')+' '+String(eL.getHours()).padStart(2,'0')+':'+String(eL.getMinutes()).padStart(2,'0');
-    html+='<div class="'+rc+'"><div class="td speed">'+s.toFixed(1)+'</div><div class="td eta">'+es+'</div><div class="td day">'+ws[eL.getDay()]+'</div></div>';
+    html+='<tr class="'+rc+'"><td>'+s.toFixed(1)+'</td><td>'+es+'</td><td>'+ws[eL.getDay()]+'</td></tr>';
   }
-  html+='</div></div>';
+  html+='</tbody></table>';
   $('e_tbl').innerHTML=html;
   $('etaResults').style.display='block';
   // Speed required from target ETA
@@ -738,6 +738,17 @@ function cETA(){
       }
     }
   }
+
+  // Auto-save inputs on change
+  document.addEventListener('input',function(e){
+    var el=e.target;
+    if(el.id && el.tagName==='INPUT'){
+      var v=el.value;
+      if(el.type==='number'||el.type==='text'||el.type==='date'||el.type==='time'){
+        ls(el.id, v);
+      }
+    }
+  });
 }
 // ===== Night Orders =====
 var ORDERS=[
@@ -916,9 +927,9 @@ function cWind(){
 
 // ===== Density =====
 function rDensity(){
-  $('d_disp').value='';$('d_tpc').value='';
-  $('d_d1').value='1.025';$('d_d2').value='';
-  $('d_fwd').value='';$('d_aft').value='';$('d_t').value='';
+  $('d_disp').value=ld('d_disp','');$('d_tpc').value=ld('d_tpc','');
+  $('d_d1').value=ld('d_d1','1.025');$('d_d2').value=ld('d_d2','');
+  $('d_fwd').value=ld('d_fwd','');$('d_aft').value=ld('d_aft','');$('d_t').value=ld('d_t','');
   $('denResults').style.display='none';
 }
 
@@ -1062,15 +1073,10 @@ function saveFuelData(){
 }
 
 function rFuel(){
-  $('fu_vn').value='';$('fu_from').value='';$('fu_to').value='';
-  $('fu_rh').value='';$('fu_rl').value='';$('fu_rm').value='';$('fu_mg').value='10';
-  for(var i=0;i<5;i++){
-    fuelLegs[i]={from:'',to:'',dist:'',speed:'',hsfo:'',lsfo:'',mgo:''};
-    fuelPorts[i]={name:'',days:'',hsfo:'',lsfo:'',mgo:''};
-  }
+  $('fu_vn').value=ld('fu_vn','');$('fu_from').value=ld('fu_from','');$('fu_to').value=ld('fu_to','');
+  $('fu_rh').value=ld('fu_rh','');$('fu_rl').value=ld('fu_rl','');$('fu_rm').value=ld('fu_rm','');$('fu_mg').value=ld('fu_mg','10');
   renderLegs();renderPorts();
   $('fuelResults').style.display='none';
-  try{localStorage.removeItem('fc_data');}catch(e){}
 }
 
 function cFuel(){
@@ -1175,11 +1181,6 @@ function cDew(){
 
 // ===== Squat =====
 function rSquat(){
-  $('s_dr').value=ld('s_dr','');
-  $('s_dep').value=ld('s_dep','');
-  $('s_spd').value=ld('s_spd','');
-  $('s_cb').value=ld('s_cb','');
-  $('s_wt').value=ld('s_wt','open');
   $('s_cl').value='';$('s_cbw').value='';$('s_cbd').value='';$('s_cdisp').value='';
   $('squatResults').style.display='none';
   ['s_dr','s_dep','s_spd','s_cb'].forEach(function(i){var e=$(i);if(e)e.value=ld(i,'')});
