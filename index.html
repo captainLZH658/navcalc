@@ -738,18 +738,17 @@ function cETA(){
       }
     }
   }
-
-  // Auto-save inputs on change
-  document.addEventListener('input',function(e){
-    var el=e.target;
-    if(el.id && el.tagName==='INPUT'){
-      var v=el.value;
-      if(el.type==='number'||el.type==='text'||el.type==='date'||el.type==='time'){
-        ls(el.id, v);
-      }
-    }
-  });
 }
+// Auto-save inputs on change (global)
+document.addEventListener('input',function(e){
+    var el=e.target;
+    if(el.id&&el.tagName==='INPUT'){
+        var v=el.value;
+        if(el.type==='number'||el.type==='text'||el.type==='date'||el.type==='time'){
+            ls(el.id,v);
+        }
+    }
+});
 // ===== Night Orders =====
 var ORDERS=[
   {cat:"Safety",text:"Call me at any time if in any doubt."},
@@ -1080,6 +1079,12 @@ function rFuel(){
 }
 
 function cFuel(){
+  // Collect all leg/port data from DOM directly
+  for(var i=0;i<5;i++){
+    fuelLegs[i]={from:$('fl_'+i+'_f').value,to:$('fl_'+i+'_t').value,dist:$('fl_'+i+'_d').value,speed:$('fl_'+i+'_s').value,hsfo:$('fl_'+i+'_h').value,lsfo:$('fl_'+i+'_l').value,mgo:$('fl_'+i+'_m').value};
+    fuelPorts[i]={name:$('fp_'+i+'_n').value,days:$('fp_'+i+'_d').value,hsfo:$('fp_'+i+'_h').value,lsfo:$('fp_'+i+'_l').value,mgo:$('fp_'+i+'_m').value};
+  }
+  saveFuelData();
   var f=function(v){return parseFloat(v)||0};
   var seaHsfo=0,seaLsfo=0,seaMgo=0,totalDist=0,totalSeaDays=0;
   for(var i=0;i<5;i++){
@@ -1107,7 +1112,6 @@ function cFuel(){
   var mh=totHsfo*mg/100,ml=totLsfo*mg/100,mm=totMgo*mg/100;
   var sfh=totHsfo+mh,sfl=totLsfo+ml,sfm=totMgo+mm;
   var robH=f($('fu_rh').value),robL=f($('fu_rl').value),robM=f($('fu_rm').value);
-  
   $('fu_sh').textContent=seaHsfo.toFixed(2);
   $('fu_sl').textContent=seaLsfo.toFixed(2);
   $('fu_sm').textContent=seaMgo.toFixed(2);
@@ -1120,7 +1124,6 @@ function cFuel(){
   $('fu_mh').textContent=mh.toFixed(2);
   $('fu_ml').textContent=ml.toFixed(2);
   $('fu_mm').textContent=mm.toFixed(2);
-  // Update margin % text
   $('fu_mp').textContent=mg+'%';
   $('fu_sfh').textContent=sfh.toFixed(2);
   $('fu_sfl').textContent=sfl.toFixed(2);
@@ -1136,7 +1139,6 @@ function cFuel(){
   $('fuelResults').style.display='block';
   saveFuelData();
 }
-// ===== Dew Point =====
 function rDew(){
   $('dw_od').value=ld('dw_od','');
   $('dw_ow').value=ld('dw_ow','');
