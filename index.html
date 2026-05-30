@@ -477,6 +477,7 @@ function showPage(id){
   var pid=map[id]||('page'+id.charAt(0).toUpperCase()+id.slice(1));
   var page=document.getElementById(pid);
   if(page){page.classList.add('active')}
+  if(id==='fuel-consumption')initFuel();
   window.scrollTo(0,0);
 }
 
