@@ -1,4 +1,4 @@
-const CACHE = 'navcalc-v2';
+const CACHE = 'navcalc-v3';
 const URLS = [
   '/',
   '/navcalc/',

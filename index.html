@@ -477,7 +477,7 @@ function showPage(id){
   var pid=map[id]||('page'+id.charAt(0).toUpperCase()+id.slice(1));
   var page=document.getElementById(pid);
   if(page){page.classList.add('active')}
-  if(id==='fuel-consumption')initFuel();
+  if(id==='fuel-consumption')initFuel(true);
   window.scrollTo(0,0);
 }
 
@@ -790,8 +790,8 @@ function cCargo(){
 // ===== Fuel =====
 var fuelLegs, fuelPorts, fuelLoaded=false;
 
-function initFuel(){
-  if(fuelLoaded)return;
+function initFuel(force){
+  if(fuelLoaded&&!force)return;
   fuelLoaded=true;
   fuelLegs=[];
   for(var i=0;i<5;i++)fuelLegs.push({from:'',to:'',dist:'',speed:'',hsfo:'',lsfo:'',mgo:''});
