@@ -1029,8 +1029,8 @@ function initApp(){
   document.getElementById('pageHome').style.display='flex';
   // ETA
   var n=new Date();
-  $('e_d').textContent=ld('e_d',n.toISOString().split('T')[0]);
-  $('e_t').textContent=ld('e_t',String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'));
+  $('e_d').value=ld('e_d',n.toISOString().split('T')[0]);
+  $('e_t').value=ld('e_t',String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'));
   $('e_su').value=ld('e_su','8');
   $('e_du').value=ld('e_du','8');
   $('e_dist').value=ld('e_dist','');
@@ -1041,34 +1041,21 @@ function initApp(){
   $('w_awa').value=ld('w_awa','');
   $('w_aws').value=ld('w_aws','');
   // Density
-  $('d_d1').value=ld('d_d1','1.025');
-  $('d_d2').value=ld('d_d2','');
-  $('d_t').value=ld('d_t','');
-  $('d_tpc').value=ld('d_tpc','');
-  $('d_disp').value=ld('d_disp','');
-  $('d_lbp').value=ld('d_lbp','');
+  $('d_disp').value=ld('d_disp','');$('d_tpc').value=ld('d_tpc','');
+  $('d_d1').value=ld('d_d1','1.025');$('d_d2').value=ld('d_d2','');
+  $('d_fwd').value=ld('d_fwd','');$('d_aft').value=ld('d_aft','');$('d_t').value=ld('d_t','');
   // Cargo
   $('c_ds').value=ld('c_ds','');
   $('c_lw').value=ld('c_lw','');
   $('c_con').value=ld('c_con','');
-  $('c_cons').value=ld('c_cons','');
   $('c_d1').value=ld('c_d1','1.025');
-  $('c_d2').value=ld('c_d2','');
-  $('c_tpc').value=ld('c_tpc','');
-  // Fuel
-  $('fu_vn').value=ld('fu_vn','');
-  $('fu_dir').value=ld('fu_dir','laden');
-  $('fu_dist').value=ld('fu_dist','');
-  $('fu_spd').value=ld('fu_spd','');
-  $('fu_hsea').value=ld('fu_hsea','');
-  $('fu_lsea').value=ld('fu_lsea','');
-  $('fu_msea').value=ld('fu_msea','');
-  $('fu_hpor').value=ld('fu_hpor','');
-  $('fu_lpor').value=ld('fu_lpor','');
-  $('fu_mpor').value=ld('fu_mpor','');
-  $('fu_sea_d').value=ld('fu_sea_d','');
-  $('fu_por_d').value=ld('fu_por_d','');
-  $('fu_mg').value=ld('fu_mg','10');
+  $('c_md').value=ld('c_md','');
+  $('c_hsfo').value=ld('c_hsfo','');$('c_lsfo').value=ld('c_lsfo','');
+  $('c_mgo').value=ld('c_mgo','');$('c_fw').value=ld('c_fw','');
+  $('c_lo').value=ld('c_lo','');$('c_st').value=ld('c_st','');
+  $('c_ot').value=ld('c_ot','');
+  // Fuel - restored in initFuel
+  initFuel();
   // Dew
   $('dw_od').value=ld('dw_od','');
   $('dw_ow').value=ld('dw_ow','');
