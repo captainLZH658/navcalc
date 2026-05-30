@@ -524,6 +524,8 @@ function cETA(){
   var etaStr=eta.getFullYear()+'-'+String(eta.getMonth()+1).padStart(2,'0')+'-'+String(eta.getDate()).padStart(2,'0')+' '+String(eta.getHours()).padStart(2,'0')+':'+String(eta.getMinutes()).padStart(2,'0')+' ('+ws[eta.getDay()]+')';
   $('e_eta2').textContent=etaStr;
   var etaUtc=new Date(utc.getTime()+h*3600000);
+  ls('e_d',$('e_d').value);ls('e_t',$('e_t').value);ls('e_su',$('e_su').value);ls('e_du',$('e_du').value);ls('e_dist',$('e_dist').value);ls('e_spd',$('e_spd').value);
+  ls('e_d',$('e_d').value);ls('e_t',$('e_t').value);ls('e_su',$('e_su').value);ls('e_du',$('e_du').value);ls('e_dist',$('e_dist').value);ls('e_spd',$('e_spd').value);
   $('e_eta_utc').textContent=etaUtc.getFullYear()+'-'+String(etaUtc.getMonth()+1).padStart(2,'0')+'-'+String(etaUtc.getDate()).padStart(2,'0')+' '+String(etaUtc.getHours()).padStart(2,'0')+':'+String(etaUtc.getMinutes()).padStart(2,'0');
   // Speed lookup table
   var avg=Math.round(spd*2)/2;
@@ -710,6 +712,7 @@ function cWind(){
   else if(rel<=-80&&rel>=-100)relStr='Stbd Beam Wind (Starboard Beam)';
   else if(rel<-100&&rel>-170)relStr='Stbd Quarter (Starboard Quarter, '+(-rel).toFixed(0)+'°)';
   $('w_rel').textContent=relStr;
+  ls('w_cog',$('w_cog').value);ls('w_sog',$('w_sog').value);ls('w_awa',$('w_awa').value);ls('w_aws',$('w_aws').value);
   $('windResults').style.display='block';
   ls('w_cog',cog);ls('w_sog',sog);ls('w_awa',awa);ls('w_aws',aws);
 }
@@ -750,6 +753,7 @@ function cDensity(){
   $('d_ada').textContent=dd_cm.toFixed(1)+' cm';
   $('d_ada').className='r-value '+cl;
   $('d_t2').textContent=(mean+dd_m).toFixed(2)+' m';
+  ls('d_disp',$('d_disp').value);ls('d_tpc',$('d_tpc').value);ls('d_d1',$('d_d1').value);ls('d_d2',$('d_d2').value);ls('d_fwd',$('d_fwd').value);ls('d_aft',$('d_aft').value);ls('d_t',$('d_t').value);
   $('denResults').style.display='block';
 }
 
@@ -784,6 +788,7 @@ function cCargo(){
   $('c_cd').textContent=corrDisp.toFixed(2)+' t';
   $('c_tc').textContent=totalCons.toFixed(2)+' t';
   $('c_mc').textContent=maxCargo.toFixed(2)+' t';
+  ls('c_ds',$('c_ds').value);ls('c_lw',$('c_lw').value);ls('c_con',$('c_con').value);ls('c_d1',$('c_d1').value);ls('c_md',$('c_md').value);ls('c_hsfo',$('c_hsfo').value);ls('c_lsfo',$('c_lsfo').value);ls('c_mgo',$('c_mgo').value);ls('c_fw',$('c_fw').value);ls('c_lo',$('c_lo').value);ls('c_st',$('c_st').value);ls('c_ot',$('c_ot').value);
   $('cargoResults').style.display='block';
 }
 
@@ -967,6 +972,7 @@ function cDew(){
     st.style.background='#d32f2f';st.style.color='#fff';
   }
   st.style.cssText+='padding:12px;border-radius:8px;text-align:center;font-size:13px;font-weight:700';
+  ls('dw_od',$('dw_od').value);ls('dw_ow',$('dw_ow').value);ls('dw_id',$('dw_id').value);ls('dw_iw',$('dw_iw').value);
   $('dewResults').style.display='block';
   ls('dw_od',od);ls('dw_ow',ow);ls('dw_id',id);ls('dw_iw',iw);
 }
@@ -1019,6 +1025,7 @@ function cSquat(){
   var stEl=$('s_st');
   stEl.textContent=st;
   stEl.className='status-banner status-'+sc;
+  ls('s_dr',$('s_dr').value);ls('s_dep',$('s_dep').value);ls('s_spd',$('s_spd').value);ls('s_cb',$('s_cb').value);ls('s_cl',$('s_cl').value);ls('s_cdisp',$('s_cdisp').value);
   $('squatResults').style.display='block';
   ls('s_dr',dr);ls('s_dep',dep);ls('s_spd',spd);ls('s_cb',cb);ls('s_wt',$('s_wt').value);
 }
