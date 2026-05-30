@@ -314,67 +314,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <div class="tool-page" data-page="fuel-consumption" id="pageFuel">
   <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
-  <div class="tool-header"><div class="header-icon">⛽</div><div class="header-title">Voyage Fuel Consumption</div><div class="header-sub">Bunker Calculator</div></div>
-  <div class="section input-section"><div class="section-title">🚢 Voyage Info</div>
-    <div class="row">
-      <div class="field"><div class="field-label">Voyage No.</div><input class="num-input" id="fu_vn" type="text" placeholder="Voyage No."></div>
-      <div class="field"><div class="field-label">Direction</div>
-        <select class="num-input yellow" id="fu_dir"><option value="laden">Laden</option><option value="ballast">Ballast</option></select>
-      </div>
-    </div>
-    <div class="row">
-      <div class="field"><div class="field-label">Distance (NM)</div><input class="num-input yellow" id="fu_dist" type="number" step="any" placeholder="NM"></div>
-      <div class="field"><div class="field-label">Speed (kn)</div><input class="num-input" id="fu_spd" type="number" step="any" placeholder="kn"></div>
-    </div>
+  <div class="tool-header"><div class="header-icon">⛽</div><div class="header-title">Voyage Fuel Consumption</div><div class="header-sub">Bunker Consumption Calculator</div></div>
+
+  <!-- Voyage Info -->
+  <div class="card">
+    <div class="section-title">Voyage Info</div>
+    <div class="field-row"><span class="label">Voyage No.:</span><input class="input" id="fu_vn" type="text" placeholder="e.g. 2026-01"></div>
+    <div class="field-row"><span class="label">From:</span><input class="input" id="fu_from" type="text" placeholder="Departure port"></div>
+    <div class="field-row"><span class="label">To:</span><input class="input" id="fu_to" type="text" placeholder="Destination port"></div>
   </div>
-  <div class="section input-section"><div class="section-title">🔥 Consumption Rate (t/day)</div>
-    <div class="row">
-      <div class="field"><div class="field-label">HSFO (Sea Legs)</div><input class="num-input" id="fu_hsea" type="number" step="any" placeholder="t/day"></div>
-      <div class="field"><div class="field-label">LSFO (Sea Legs)</div><input class="num-input" id="fu_lsea" type="number" step="any" placeholder="t/day"></div>
-    </div>
-    <div class="row">
-      <div class="field"><div class="field-label">MGO (Sea Legs)</div><input class="num-input" id="fu_msea" type="number" step="any" placeholder="t/day"></div>
-      <div class="field"><div class="field-label">Port Stays HSFO</div><input class="num-input" id="fu_hpor" type="number" step="any" placeholder="t/day"></div>
-    </div>
-    <div class="row">
-      <div class="field"><div class="field-label">Port Stays LSFO</div><input class="num-input" id="fu_lpor" type="number" step="any" placeholder="t/day"></div>
-      <div class="field"><div class="field-label">Port Stays MGO</div><input class="num-input" id="fu_mpor" type="number" step="any" placeholder="t/day"></div>
-    </div>
+
+  <!-- Sea Legs -->
+  <div class="card">
+    <div class="section-title">Sea Legs</div>
+    <div id="fu_legs_container"></div>
   </div>
-  <div class="section input-section"><div class="section-title">📅 Transit Time</div>
-    <div class="row">
-      <div class="field"><div class="field-label">Sea Passage (days)</div><input class="num-input yellow" id="fu_sea_d" type="number" step="any" placeholder="days"></div>
-      <div class="field"><div class="field-label">Port Operations (days)</div><input class="num-input" id="fu_por_d" type="number" step="any" placeholder="days"></div>
-    </div>
-    <div class="row">
-      <div class="field"><div class="field-label">Safety Margin (%)</div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <input class="num-input" id="fu_mg" type="number" step="any" value="10" style="width:80px;flex:none">
-          <span style="font-size:13px;color:#666">%</span>
-        </div>
-      </div>
-      <div class="field"><span class="hint">Default10%Safety Margin</span></div>
-    </div>
+
+  <!-- Port Stays -->
+  <div class="card">
+    <div class="section-title">Port Stays</div>
+    <div id="fu_ports_container"></div>
   </div>
-  <button class="calc-btn" onclick="cFuel()">🧮 Calculate Fuel Required</button>
-  <div class="section result-section" id="fuelResults" style="display:none"><div class="section-title">📋 Bunker Plan</div>
-    <div class="result-card">
-      <div class="result-row"><span class="result-label">HSFO Required</span><span class="result-value highlight" id="fu_h"></span></div>
-      <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">LSFO Required</span><span class="result-value" id="fu_l"></span></div>
-      <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">MGO Required</span><span class="result-value" id="fu_m"></span></div>
-      <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">Total Fuel Required</span><span class="result-value" id="fu_t"></span></div>
-      <div class="result-divider"></div>
-      <div class="result-row"><span class="result-label">Safety Margin</span><span class="result-value" id="fu_mgn"></span></div>
-    </div>
+
+  <!-- Bunker ROB -->
+  <div class="card">
+    <div class="section-title">Bunker ROB</div>
+    <div class="field-row"><span class="label">HSFO ROB (t):</span><input class="input" id="fu_rh" type="number" step="any" placeholder="t"></div>
+    <div class="field-row"><span class="label">LSFO ROB (t):</span><input class="input" id="fu_rl" type="number" step="any" placeholder="t"></div>
+    <div class="field-row"><span class="label">MGO ROB (t):</span><input class="input" id="fu_rm" type="number" step="any" placeholder="t"></div>
+    <div class="field-row"><span class="label">Safety Margin (%):</span><input class="input" id="fu_mg" type="number" step="any" value="10" placeholder="%"></div>
   </div>
+
+  <button class="calc-btn" onclick="cFuel()">CALCULATE</button>
+
+  <!-- Results -->
+  <div class="card" id="fuelResults" style="display:none">
+    <div class="section-title">Fuel Consumption Summary</div>
+    <div class="ft-wrap">
+      <div class="ft-row ft-header"><span class="ft-i">Item</span><span class="ft-v">HSFO</span><span class="ft-v">LSFO</span><span class="ft-v">MGO</span></div>
+      <div class="ft-row"><span class="ft-i">Sea Consumption</span><span class="ft-v" id="fu_sh">0</span><span class="ft-v" id="fu_sl">0</span><span class="ft-v" id="fu_sm">0</span></div>
+      <div class="ft-row"><span class="ft-i">Port Consumption</span><span class="ft-v" id="fu_ph">0</span><span class="ft-v" id="fu_pl">0</span><span class="ft-v" id="fu_pm">0</span></div>
+      <div class="ft-sep"></div>
+      <div class="ft-row ft-total"><span class="ft-i">Total Consumption</span><span class="ft-v" id="fu_th">0</span><span class="ft-v" id="fu_tl">0</span><span class="ft-v" id="fu_tm">0</span></div>
+      <div class="ft-row"><span class="ft-i">+ Safety Margin (0%)</span><span class="ft-v" id="fu_mh">0</span><span class="ft-v" id="fu_ml">0</span><span class="ft-v" id="fu_mm">0</span></div>
+      <div class="ft-row"><span class="ft-i">Safe Required</span><span class="ft-v" id="fu_sfh">0</span><span class="ft-v" id="fu_sfl">0</span><span class="ft-v" id="fu_sfm">0</span></div>
+      <div class="ft-sep"></div>
+      <div class="ft-row"><span class="ft-i">ROB</span><span class="ft-v" id="fu_rh_r">0</span><span class="ft-v" id="fu_rl_r">0</span><span class="ft-v" id="fu_rm_r">0</span></div>
+      <div class="ft-row ft-total"><span class="ft-i">Balance</span><span class="ft-v" id="fu_bh">0</span><span class="ft-v" id="fu_bl">0</span><span class="ft-v" id="fu_bm">0</span></div>
+    </div>
+    <div class="voyage-summary">Total Distance: <span id="fu_td">0</span> nm | Sea Days: <span id="fu_sd">0</span></div>
+  </div>
+
   <button class="reset-btn" onclick="rFuel()">↻ Reset</button>
   <div class="tool-footer">Captain LZH</div>
-</div>
-
-<div class="tool-page" data-page="dew-point" id="pageDew">
+</div><div class="tool-page" data-page="dew-point" id="pageDew">
   <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
   <div class="tool-header"><div class="header-icon">💧</div><div class="header-title">Dew Point Ventilation</div><div class="header-sub">Dew Point Ventilation</div></div>
   <div class="section input-section"><div class="section-title">🌡️ Outside (Outside)</div>
@@ -794,47 +787,147 @@ function cCargo(){
 }
 
 // ===== Fuel =====
+var fuelLegs, fuelPorts, fuelLoaded=false;
+
+function initFuel(){
+  if(fuelLoaded)return;
+  fuelLoaded=true;
+  fuelLegs=[];
+  for(var i=0;i<5;i++)fuelLegs.push({from:'',to:'',dist:'',speed:'',hsfo:'',lsfo:'',mgo:''});
+  fuelPorts=[];
+  for(var i=0;i<5;i++)fuelPorts.push({name:'',days:'',hsfo:'',lsfo:'',mgo:''});
+  try{var d=JSON.parse(localStorage.getItem('fc_data'));if(d){fuelLegs=d.legs||fuelLegs;fuelPorts=d.ports||fuelPorts;if(d.vn)$('fu_vn').value=d.vn;if(d.fr)$('fu_from').value=d.fr;if(d.to)$('fu_to').value=d.to;if(d.rh)$('fu_rh').value=d.rh;if(d.rl)$('fu_rl').value=d.rl;if(d.rm)$('fu_rm').value=d.rm;if(d.mg)$('fu_mg').value=d.mg;}}catch(e){}
+  renderLegs();
+  renderPorts();
+}
+
+function renderLegs(){
+  var html='';
+  for(var i=0;i<fuelLegs.length;i++){
+    var l=fuelLegs[i];
+    html+='<div class="leg-row">'
+      +'<span class="leg-header">Leg '+(i+1)+'</span>'
+      +'<div class="leg-fromto">'
+      +'<input class="input legname" id="fl_'+i+'_f" value="'+l.from+'" placeholder="From" onchange="saveLeg('+i+')">'
+      +'<span class="leg-arrow">→</span>'
+      +'<input class="input legname" id="fl_'+i+'_t" value="'+l.to+'" placeholder="To" onchange="saveLeg('+i+')">'
+      +'</div>'
+      +'<div class="leg-fields">'
+      +'<input class="input leg" id="fl_'+i+'_d" value="'+l.dist+'" placeholder="nm" onchange="saveLeg('+i+')">'
+      +'<input class="input leg" id="fl_'+i+'_s" value="'+l.speed+'" placeholder="kn" onchange="saveLeg('+i+')">'
+      +'<input class="input leg" id="fl_'+i+'_h" value="'+l.hsfo+'" placeholder="HSFO" onchange="saveLeg('+i+')">'
+      +'<input class="input leg" id="fl_'+i+'_l" value="'+l.lsfo+'" placeholder="LSFO" onchange="saveLeg('+i+')">'
+      +'<input class="input leg" id="fl_'+i+'_m" value="'+l.mgo+'" placeholder="MGO" onchange="saveLeg('+i+')">'
+      +'</div>'
+      +'<div class="leg-labels"><span>Dist</span><span>Spd</span><span>HSFO</span><span>LSFO</span><span>MGO</span></div>'
+      +'</div>';
+  }
+  $('fu_legs_container').innerHTML=html;
+}
+
+function renderPorts(){
+  var html='';
+  for(var i=0;i<fuelPorts.length;i++){
+    var p=fuelPorts[i];
+    html+='<div class="port-row">'
+      +'<span class="port-header">Port '+(i+1)+'</span>'
+      +'<input class="input portname" id="fp_'+i+'_n" value="'+p.name+'" placeholder="Port name" onchange="savePort('+i+')">'
+      +'<div class="port-fields">'
+      +'<input class="input leg" id="fp_'+i+'_d" value="'+p.days+'" placeholder="days" onchange="savePort('+i+')">'
+      +'<input class="input leg" id="fp_'+i+'_h" value="'+p.hsfo+'" placeholder="HSFO" onchange="savePort('+i+')">'
+      +'<input class="input leg" id="fp_'+i+'_l" value="'+p.lsfo+'" placeholder="LSFO" onchange="savePort('+i+')">'
+      +'<input class="input leg" id="fp_'+i+'_m" value="'+p.mgo+'" placeholder="MGO" onchange="savePort('+i+')">'
+      +'</div>'
+      +'</div>';
+  }
+  $('fu_ports_container').innerHTML=html;
+}
+
+function saveLeg(i){
+  fuelLegs[i]={from:$('fl_'+i+'_f').value,to:$('fl_'+i+'_t').value,dist:$('fl_'+i+'_d').value,speed:$('fl_'+i+'_s').value,hsfo:$('fl_'+i+'_h').value,lsfo:$('fl_'+i+'_l').value,mgo:$('fl_'+i+'_m').value};
+  saveFuelData();
+}
+
+function savePort(i){
+  fuelPorts[i]={name:$('fp_'+i+'_n').value,days:$('fp_'+i+'_d').value,hsfo:$('fp_'+i+'_h').value,lsfo:$('fp_'+i+'_l').value,mgo:$('fp_'+i+'_m').value};
+  saveFuelData();
+}
+
+function saveFuelData(){
+  var d={legs:fuelLegs,ports:fuelPorts,vn:$('fu_vn').value,fr:$('fu_from').value,to:$('fu_to').value,rh:$('fu_rh').value,rl:$('fu_rl').value,rm:$('fu_rm').value,mg:$('fu_mg').value};
+  try{localStorage.setItem('fc_data',JSON.stringify(d));}catch(e){}
+}
+
 function rFuel(){
-  $('fu_vn').value=ld('fu_vn','');
-  $('fu_dir').value=ld('fu_dir','laden');
-  $('fu_dist').value=ld('fu_dist','');
-  $('fu_spd').value=ld('fu_spd','');
-  $('fu_hsea').value=ld('fu_hsea','');
-  $('fu_lsea').value=ld('fu_lsea','');
-  $('fu_msea').value=ld('fu_msea','');
-  $('fu_hpor').value=ld('fu_hpor','');
-  $('fu_lpor').value=ld('fu_lpor','');
-  $('fu_mpor').value=ld('fu_mpor','');
-  $('fu_sea_d').value=ld('fu_sea_d','');
-  $('fu_por_d').value=ld('fu_por_d','');
-  $('fu_mg').value=ld('fu_mg','10');
+  $('fu_vn').value='';$('fu_from').value='';$('fu_to').value='';
+  $('fu_rh').value='';$('fu_rl').value='';$('fu_rm').value='';$('fu_mg').value='10';
+  for(var i=0;i<5;i++){
+    fuelLegs[i]={from:'',to:'',dist:'',speed:'',hsfo:'',lsfo:'',mgo:''};
+    fuelPorts[i]={name:'',days:'',hsfo:'',lsfo:'',mgo:''};
+  }
+  renderLegs();renderPorts();
   $('fuelResults').style.display='none';
+  try{localStorage.removeItem('fc_data');}catch(e){}
 }
 
 function cFuel(){
-  var dist=parseFloat($('fu_dist').value),spd=parseFloat($('fu_spd').value);
-  var hsea=parseFloat($('fu_hsea').value),lsea=parseFloat($('fu_lsea').value),msea=parseFloat($('fu_msea').value);
-  var hpor=parseFloat($('fu_hpor').value),lpor=parseFloat($('fu_lpor').value),mpor=parseFloat($('fu_mpor').value);
-  var sea_d=parseFloat($('fu_sea_d').value),por_d=parseFloat($('fu_por_d').value);
-  var mg=parseFloat($('fu_mg').value)||10;
-  if(isNaN(sea_d))sea_d=0;
-  if(isNaN(por_d))por_d=0;
-  if(sea_d===0&&dist>0&&spd>0)sea_d=dist/spd/24;
-  $('fu_sea_d').value=sea_d.toFixed(2);
-  var h=((hsea||0)*sea_d+(hpor||0)*por_d)*(1+mg/100);
-  var l=((lsea||0)*sea_d+(lpor||0)*por_d)*(1+mg/100);
-  var m=((msea||0)*sea_d+(mpor||0)*por_d)*(1+mg/100);
-  $('fu_h').textContent=h.toFixed(2)+' t';
-  $('fu_l').textContent=l.toFixed(2)+' t';
-  $('fu_m').textContent=m.toFixed(2)+' t';
-  $('fu_t').textContent=(h+l+m).toFixed(2)+' t';
-  $('fu_mgn').textContent=mg.toFixed(0)+'%';
+  var f=function(v){return parseFloat(v)||0};
+  var seaHsfo=0,seaLsfo=0,seaMgo=0,totalDist=0,totalSeaDays=0;
+  for(var i=0;i<5;i++){
+    var l=fuelLegs[i];
+    var dist=f(l.dist),spd=f(l.speed);
+    if(dist&&spd){
+      var days=dist/spd/24;
+      totalDist+=dist;
+      totalSeaDays+=days;
+      seaHsfo+=days*f(l.hsfo);
+      seaLsfo+=days*f(l.lsfo);
+      seaMgo+=days*f(l.mgo);
+    }
+  }
+  var portHsfo=0,portLsfo=0,portMgo=0;
+  for(var i=0;i<5;i++){
+    var p=fuelPorts[i];
+    var days=f(p.days);
+    portHsfo+=days*f(p.hsfo);
+    portLsfo+=days*f(p.lsfo);
+    portMgo+=days*f(p.mgo);
+  }
+  var totHsfo=seaHsfo+portHsfo,totLsfo=seaLsfo+portLsfo,totMgo=seaMgo+portMgo;
+  var mg=f($('fu_mg').value)||0;
+  var mh=totHsfo*mg/100,ml=totLsfo*mg/100,mm=totMgo*mg/100;
+  var sfh=totHsfo+mh,sfl=totLsfo+ml,sfm=totMgo+mm;
+  var robH=f($('fu_rh').value),robL=f($('fu_rl').value),robM=f($('fu_rm').value);
+  
+  $('fu_sh').textContent=seaHsfo.toFixed(2);
+  $('fu_sl').textContent=seaLsfo.toFixed(2);
+  $('fu_sm').textContent=seaMgo.toFixed(2);
+  $('fu_ph').textContent=portHsfo.toFixed(2);
+  $('fu_pl').textContent=portLsfo.toFixed(2);
+  $('fu_pm').textContent=portMgo.toFixed(2);
+  $('fu_th').textContent=totHsfo.toFixed(2);
+  $('fu_tl').textContent=totLsfo.toFixed(2);
+  $('fu_tm').textContent=totMgo.toFixed(2);
+  $('fu_mh').textContent=mh.toFixed(2);
+  $('fu_ml').textContent=ml.toFixed(2);
+  $('fu_mm').textContent=mm.toFixed(2);
+  // Update margin % text
+  var mgSpan=document.querySelector('#fuelResults .ft-row:nth-child(5) .ft-i');
+  if(mgSpan)mgSpan.textContent='+ Safety Margin ('+mg+'%)';
+  $('fu_sfh').textContent=sfh.toFixed(2);
+  $('fu_sfl').textContent=sfl.toFixed(2);
+  $('fu_sfm').textContent=sfm.toFixed(2);
+  $('fu_rh_r').textContent=robH.toFixed(2);
+  $('fu_rl_r').textContent=robL.toFixed(2);
+  $('fu_rm_r').textContent=robM.toFixed(2);
+  $('fu_bh').textContent=(robH-sfh).toFixed(2);
+  $('fu_bl').textContent=(robL-sfl).toFixed(2);
+  $('fu_bm').textContent=(robM-sfm).toFixed(2);
+  $('fu_td').textContent=totalDist.toFixed(1);
+  $('fu_sd').textContent=totalSeaDays.toFixed(2);
   $('fuelResults').style.display='block';
-  ls('fu_vn',$('fu_vn').value);ls('fu_dir',$('fu_dir').value);ls('fu_dist',dist);ls('fu_spd',spd);
-  ls('fu_hsea',hsea);ls('fu_lsea',lsea);ls('fu_msea',msea);ls('fu_hpor',hpor);ls('fu_lpor',lpor);ls('fu_mpor',mpor);
-  ls('fu_sea_d',sea_d);ls('fu_por_d',por_d);ls('fu_mg',mg);
+  saveFuelData();
 }
-
 // ===== Dew Point =====
 function rDew(){
   $('dw_od').value=ld('dw_od','');
