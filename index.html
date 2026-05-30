@@ -106,6 +106,15 @@ input[type="date"], input[type="time"] {
 /* Label with icon support */
 .label-icon{margin-right:3px}
 
+
+/* Fuel consumption table */
+.fuel-table{width:100%;border-collapse:collapse;font-size:13px}
+.fuel-table th{background:#1F4E79;color:#fff;padding:8px;text-align:center;font-size:12px;font-weight:600}
+.fuel-table td{padding:7px 8px;text-align:center;border-bottom:1px solid #E8EDF3;color:#333}
+.fuel-table td:first-child{text-align:left;font-weight:500}
+.fuel-table .ftr-cat td{background:#F0F4F8;font-weight:700;color:#1F4E79;font-size:12px;text-transform:uppercase;letter-spacing:0.3px;padding:6px 8px}
+.fuel-table .ftr-total td{background:#FFF8E0;font-weight:700;color:#1F4E79}
+.fuel-table .ftr-total td:first-child{color:#333}
 </style>
 </head>
 <body>
@@ -244,53 +253,59 @@ input[type="date"], input[type="time"] {
   <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
   <div class="tool-header"><div class="header-icon">🌊</div><div class="header-title">Density Draft Correction</div><div class="header-sub">Effect of Water Density Change on Draft</div></div>
   <!-- Vessel Data -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Vessel Data</div>
-    <div class="field-row"><span class="label">Displacement (t):</span><input class="input" id="d_disp" type="number" step="any" placeholder="e.g. 50000"></div>
-    <div class="field-row"><span class="label">TPC (t/cm):</span><input class="input" id="d_tpc" type="number" step="any" placeholder="e.g. 52.0"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Displacement (t)</span><input class="num-input yellow" id="d_disp" type="number" step="any" placeholder="e.g. 50000"></div>
+      <div class="field"><span class="field-label">TPC (t/cm)</span><input class="num-input yellow" id="d_tpc" type="number" step="any" placeholder="e.g. 52.0"></div>
+    </div>
   </div>
   <!-- Water Density -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Water Density</div>
-    <div class="field-row"><span class="label">Current ρ₁ (t/m³):</span><input class="input" id="d_d1" type="number" step="any" value="1.025" placeholder="e.g. 1.025"></div>
-    <div class="field-row"><span class="label">New ρ₂ (t/m³):</span><input class="input" id="d_d2" type="number" step="any" placeholder="e.g. 1.010"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Current ρ₁ (t/m³)</span><input class="num-input yellow" id="d_d1" type="number" step="any" value="1.025" placeholder="1.025"></div>
+      <div class="field"><span class="field-label">New ρ₂ (t/m³)</span><input class="num-input yellow" id="d_d2" type="number" step="any" placeholder="e.g. 1.010"></div>
+    </div>
   </div>
   <!-- Current Draft -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Current Draft (m)</div>
-    <div class="field-row two-col" style="display:flex;gap:10px">
-      <div style="flex:1"><span class="label" style="font-size:12px">Fwd:</span><input class="input" id="d_fwd" type="number" step="any" placeholder="m"></div>
-      <div style="flex:1"><span class="label" style="font-size:12px">Aft:</span><input class="input" id="d_aft" type="number" step="any" placeholder="m"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Fwd (m)</span><input class="num-input yellow" id="d_fwd" type="number" step="any" placeholder="Fwd draft"></div>
+      <div class="field"><span class="field-label">Aft (m)</span><input class="num-input yellow" id="d_aft" type="number" step="any" placeholder="Aft draft"></div>
     </div>
-    <div class="field-row"><span class="label">Mean Draft (m):</span><input class="input" id="d_t" type="number" step="any" placeholder="Or input directly"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Mean Draft (m)</span><input class="num-input yellow" id="d_t" type="number" step="any" placeholder="Or input directly"></div>
+      <div class="field"></div>
+    </div>
   </div>
   <!-- Calculate -->
-  <button class="calc-btn" onclick="cDensity()">CALCULATE</button>
+  <button class="calc-btn" onclick="cDensity()">🧮 CALCULATE</button>
   <!-- Results -->
-  <div class="card" id="denResults" style="display:none">
-    <div class="section-title">Result</div>
-    <div class="result-grid two">
-      <div class="result-item"><span class="r-label">Draft Change (Δd)</span><span class="r-value" id="d_dd">0</span></div>
-      <div class="result-item"><span class="r-label">-</span><span class="r-value" id="d_dd_unit">cm</span></div>
+  <div class="section result-section" id="denResults" style="display:none">
+    <div class="section-title">📋 Results</div>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">📏</span><span class="result-cat-label">Draft Change</span></div>
+      <div class="result-row"><span class="result-label">Δd (Draft Change)</span><span class="result-value highlight" id="d_dd"></span></div>
+      <div class="result-row"><span class="result-label">Direction</span><span class="result-value" id="d_dd2"></span></div>
     </div>
-    <div class="sep"></div>
-    <div class="result-grid three">
-      <div class="result-item"><span class="r-label">Current Fwd</span><span class="r-value" id="d_cf">-</span></div>
-      <div class="result-item"><span class="r-label">New Fwd</span><span class="r-value new" id="d_nf">-</span></div>
-      <div class="result-item"><span class="r-label">Diff</span><span class="r-value" id="d_fd">-</span></div>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">⬆️</span><span class="result-cat-label">Forward Draft</span></div>
+      <div class="result-row"><span class="result-label">Current Fwd</span><span class="result-value" id="d_cf"></span></div>
+      <div class="result-row"><span class="result-label">New Fwd</span><span class="result-value highlight" id="d_nf"></span></div>
+      <div class="result-row"><span class="result-label">Difference</span><span class="result-value" id="d_fd"></span></div>
     </div>
-    <div class="sep"></div>
-    <div class="result-grid three">
-      <div class="result-item"><span class="r-label">Current Aft</span><span class="r-value" id="d_ca">-</span></div>
-      <div class="result-item"><span class="r-label">New Aft</span><span class="r-value new" id="d_na">-</span></div>
-      <div class="result-item"><span class="r-label">Diff</span><span class="r-value" id="d_ada">-</span></div>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">⬇️</span><span class="result-cat-label">Aft Draft</span></div>
+      <div class="result-row"><span class="result-label">Current Aft</span><span class="result-value" id="d_ca"></span></div>
+      <div class="result-row"><span class="result-label">New Aft</span><span class="result-value highlight" id="d_na"></span></div>
+      <div class="result-row"><span class="result-label">Difference</span><span class="result-value" id="d_ada"></span></div>
     </div>
-    <div class="sep"></div>
-    <div class="result-grid two">
-      <div class="result-item"><span class="r-label">Mean Draft (new)</span><span class="r-value new" id="d_t2">-</span></div>
-      <div class="result-item"><span class="r-label">Density Correction</span><span class="r-value" id="d_dd2">-</span></div>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">🎯</span><span class="result-cat-label">New Mean Draft</span></div>
+      <div class="result-row"><span class="result-label">New Mean Draft</span><span class="result-value highlight" id="d_t2"></span></div>
     </div>
-    <div class="sep"></div>
     <div style="font-size:11px;color:#888;text-align:center;padding:8px">Δd = Disp/TPC × (1/ρ₂ − 1/ρ₁)</div>
   </div>
   <button class="reset-btn" onclick="rDensity()">↻ Reset</button>
@@ -301,45 +316,59 @@ input[type="date"], input[type="time"] {
   <div class="back-bar"><button class="back-btn" onclick="showPage('home')"><span>&lt;</span><span class="back-text">Back</span></button></div>
   <div class="tool-header"><div class="header-icon">📦</div><div class="header-title">Cargo Capacity</div><div class="header-sub">Maximum Cargo Capacity Calculator</div></div>
   <!-- Max Allowable Values -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Max Allowable Values</div>
-    <div class="field-row"><span class="label">Max Draft (m):</span><input class="input" id="c_md" type="number" step="any" placeholder="e.g. 12.50"></div>
-    <div class="field-row"><span class="label">Max Displacement (t):</span><input class="input" id="c_ds" type="number" step="any" placeholder="e.g. 67613.56"></div>
-    <div class="field-row"><span class="label">Water Density (t/m³):</span><input class="input" id="c_d1" type="number" step="any" value="1.025" placeholder="e.g. 1.025"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Max Draft (m)</span><input class="num-input yellow" id="c_md" type="number" step="any" placeholder="e.g. 12.50"></div>
+      <div class="field"><span class="field-label">Max Displacement (t)</span><input class="num-input yellow" id="c_ds" type="number" step="any" placeholder="e.g. 67613.56"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Water Density (t/m³)</span><input class="num-input yellow" id="c_d1" type="number" step="any" value="1.025" placeholder="1.025"></div>
+      <div class="field"></div>
+    </div>
   </div>
   <!-- Ship Constants -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Ship Constants</div>
-    <div class="field-row"><span class="label">Light Ship (t):</span><input class="input" id="c_lw" type="number" step="any" placeholder="e.g. 11201"></div>
-    <div class="field-row"><span class="label">Constant (t):</span><input class="input" id="c_con" type="number" step="any" placeholder="e.g. 600"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Light Ship (t)</span><input class="num-input yellow" id="c_lw" type="number" step="any" placeholder="e.g. 11201"></div>
+      <div class="field"><span class="field-label">Constant (t)</span><input class="num-input yellow" id="c_con" type="number" step="any" placeholder="e.g. 600"></div>
+    </div>
   </div>
   <!-- Stores & Consumables -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Stores & Consumables (t)</div>
-    <div class="field-row"><span class="label">HSFO:</span><input class="input" id="c_hsfo" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">LSFO:</span><input class="input" id="c_lsfo" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">MGO:</span><input class="input" id="c_mgo" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">FW:</span><input class="input" id="c_fw" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">Lub Oil:</span><input class="input" id="c_lo" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">Stores:</span><input class="input" id="c_st" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">Other:</span><input class="input" id="c_ot" type="number" step="any" placeholder="t"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">HSFO</span><input class="num-input yellow" id="c_hsfo" type="number" step="any" placeholder="t"></div>
+      <div class="field"><span class="field-label">LSFO</span><input class="num-input yellow" id="c_lsfo" type="number" step="any" placeholder="t"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">MGO</span><input class="num-input yellow" id="c_mgo" type="number" step="any" placeholder="t"></div>
+      <div class="field"><span class="field-label">FW</span><input class="num-input yellow" id="c_fw" type="number" step="any" placeholder="t"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Lub Oil</span><input class="num-input yellow" id="c_lo" type="number" step="any" placeholder="t"></div>
+      <div class="field"><span class="field-label">Stores</span><input class="num-input yellow" id="c_st" type="number" step="any" placeholder="t"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Other</span><input class="num-input yellow" id="c_ot" type="number" step="any" placeholder="t"></div>
+      <div class="field"></div>
+    </div>
   </div>
-  <button class="calc-btn" onclick="cCargo()">CALCULATE</button>
-  <div class="card" id="cargoResults" style="display:none">
-    <div class="section-title">Result</div>
-    <div class="result-item full" style="text-align:center;padding:8px 0">
-      <span class="r-label">Max Displacement @ <span id="c_dl">1.025</span> (corrected)</span>
-      <span class="r-value new" id="c_cd">-</span>
+  <button class="calc-btn" onclick="cCargo()">🧮 CALCULATE</button>
+  <div class="section result-section" id="cargoResults" style="display:none">
+    <div class="section-title">📋 Results</div>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">⚓</span><span class="result-cat-label">Displacement Correction</span></div>
+      <div class="result-row"><span class="result-label">Max Displacement @ <span id="c_dl">1.025</span> (Corrected)</span><span class="result-value highlight" id="c_cd"></span></div>
     </div>
-    <div class="sep"></div>
-    <div class="result-item full" style="text-align:center;padding:8px 0">
-      <span class="r-label">Total Consumables</span>
-      <span class="r-value" id="c_tc">-</span>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">📦</span><span class="result-cat-label">Consumables</span></div>
+      <div class="result-row"><span class="result-label">Total Consumables</span><span class="result-value" id="c_tc"></span></div>
     </div>
-    <div class="sep"></div>
-    <div class="result-item full" style="text-align:center;padding:8px 0">
-      <span class="r-label">Max Cargo Capacity</span>
-      <span class="r-value highlight new" id="c_mc">-</span>
+    <div class="result-card">
+      <div class="result-cat"><span class="result-cat-icon">🏆</span><span class="result-cat-label">Max Cargo</span></div>
+      <div class="result-row"><span class="result-label">Max Cargo Capacity</span><span class="result-value highlight" id="c_mc"></span></div>
     </div>
   </div>
   <button class="reset-btn" onclick="rCargo()">↻ Reset</button>
@@ -351,52 +380,166 @@ input[type="date"], input[type="time"] {
   <div class="tool-header"><div class="header-icon">⛽</div><div class="header-title">Voyage Fuel Consumption</div><div class="header-sub">Bunker Consumption Calculator</div></div>
 
   <!-- Voyage Info -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Voyage Info</div>
-    <div class="field-row"><span class="label">Voyage No.:</span><input class="input" id="fu_vn" type="text" placeholder="e.g. 2026-01"></div>
-    <div class="field-row"><span class="label">From:</span><input class="input" id="fu_from" type="text" placeholder="Departure port"></div>
-    <div class="field-row"><span class="label">To:</span><input class="input" id="fu_to" type="text" placeholder="Destination port"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">Voyage No.</span><input class="num-input yellow" id="fu_vn" type="text" placeholder="e.g. V-2026-05"></div>
+      <div class="field"><span class="field-label">From</span><input class="num-input yellow" id="fu_from" type="text" placeholder="Departure port"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">To</span><input class="num-input yellow" id="fu_to" type="text" placeholder="Destination port"></div>
+      <div class="field"></div>
+    </div>
   </div>
 
-  <!-- Sea Legs -->
-  <div class="card">
-    <div class="section-title">Sea Legs</div>
-    <div id="fu_legs_container"></div>
-  </div>
+  <!-- Sea Legs (5) -->
+  <div class="section input-section">
+    <div class="section-title">Sea Legs</div>    <div class="row">
+      <div class="field"><span class="field-label">Leg 1 From</span><input class="num-input yellow" id="fu_l1f" type="text" placeholder="From"></div>
+      <div class="field"><span class="field-label">To</span><input class="num-input yellow" id="fu_l1t" type="text" placeholder="To"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Distance (NM)</span><input class="num-input yellow" id="fu_l1d" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><span class="field-label">Speed (kn)</span><input class="num-input yellow" id="fu_l1s" type="number" step="any" placeholder="kn"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_l1h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_l1l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_l1m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Leg 2 From</span><input class="num-input yellow" id="fu_l2f" type="text" placeholder="From"></div>
+      <div class="field"><span class="field-label">To</span><input class="num-input yellow" id="fu_l2t" type="text" placeholder="To"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Distance (NM)</span><input class="num-input yellow" id="fu_l2d" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><span class="field-label">Speed (kn)</span><input class="num-input yellow" id="fu_l2s" type="number" step="any" placeholder="kn"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_l2h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_l2l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_l2m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Leg 3 From</span><input class="num-input yellow" id="fu_l3f" type="text" placeholder="From"></div>
+      <div class="field"><span class="field-label">To</span><input class="num-input yellow" id="fu_l3t" type="text" placeholder="To"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Distance (NM)</span><input class="num-input yellow" id="fu_l3d" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><span class="field-label">Speed (kn)</span><input class="num-input yellow" id="fu_l3s" type="number" step="any" placeholder="kn"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_l3h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_l3l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_l3m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Leg 4 From</span><input class="num-input yellow" id="fu_l4f" type="text" placeholder="From"></div>
+      <div class="field"><span class="field-label">To</span><input class="num-input yellow" id="fu_l4t" type="text" placeholder="To"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Distance (NM)</span><input class="num-input yellow" id="fu_l4d" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><span class="field-label">Speed (kn)</span><input class="num-input yellow" id="fu_l4s" type="number" step="any" placeholder="kn"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_l4h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_l4l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_l4m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Leg 5 From</span><input class="num-input yellow" id="fu_l5f" type="text" placeholder="From"></div>
+      <div class="field"><span class="field-label">To</span><input class="num-input yellow" id="fu_l5t" type="text" placeholder="To"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">Distance (NM)</span><input class="num-input yellow" id="fu_l5d" type="number" step="any" placeholder="NM"></div>
+      <div class="field"><span class="field-label">Speed (kn)</span><input class="num-input yellow" id="fu_l5s" type="number" step="any" placeholder="kn"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_l5h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_l5l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_l5m" type="number" step="any" placeholder="t/d"></div>
+    </div>  </div>
 
-  <!-- Port Stays -->
-  <div class="card">
-    <div class="section-title">Port Stays</div>
-    <div id="fu_ports_container"></div>
-  </div>
+  <!-- Port Stays (5) -->
+  <div class="section input-section">
+    <div class="section-title">Port Stays</div>    <div class="row">
+      <div class="field"><span class="field-label">Port 1 Name</span><input class="num-input yellow" id="fu_p1n" type="text" placeholder="Port name"></div>
+      <div class="field"><span class="field-label">Days</span><input class="num-input yellow" id="fu_p1d" type="number" step="any" placeholder="Days"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_p1h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_p1l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_p1m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Port 2 Name</span><input class="num-input yellow" id="fu_p2n" type="text" placeholder="Port name"></div>
+      <div class="field"><span class="field-label">Days</span><input class="num-input yellow" id="fu_p2d" type="number" step="any" placeholder="Days"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_p2h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_p2l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_p2m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Port 3 Name</span><input class="num-input yellow" id="fu_p3n" type="text" placeholder="Port name"></div>
+      <div class="field"><span class="field-label">Days</span><input class="num-input yellow" id="fu_p3d" type="number" step="any" placeholder="Days"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_p3h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_p3l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_p3m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Port 4 Name</span><input class="num-input yellow" id="fu_p4n" type="text" placeholder="Port name"></div>
+      <div class="field"><span class="field-label">Days</span><input class="num-input yellow" id="fu_p4d" type="number" step="any" placeholder="Days"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_p4h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_p4l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_p4m" type="number" step="any" placeholder="t/d"></div>
+    </div>    <div class="row">
+      <div class="field"><span class="field-label">Port 5 Name</span><input class="num-input yellow" id="fu_p5n" type="text" placeholder="Port name"></div>
+      <div class="field"><span class="field-label">Days</span><input class="num-input yellow" id="fu_p5d" type="number" step="any" placeholder="Days"></div>
+    </div>
+    <div class="row" style="margin-bottom:16px">
+      <div class="field"><span class="field-label">HSFO (t/d)</span><input class="num-input yellow" id="fu_p5h" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">LSFO (t/d)</span><input class="num-input yellow" id="fu_p5l" type="number" step="any" placeholder="t/d"></div>
+      <div class="field"><span class="field-label">MGO (t/d)</span><input class="num-input yellow" id="fu_p5m" type="number" step="any" placeholder="t/d"></div>
+    </div>  </div>
 
   <!-- Bunker ROB -->
-  <div class="card">
+  <div class="section input-section">
     <div class="section-title">Bunker ROB</div>
-    <div class="field-row"><span class="label">HSFO ROB (t):</span><input class="input" id="fu_rh" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">LSFO ROB (t):</span><input class="input" id="fu_rl" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">MGO ROB (t):</span><input class="input" id="fu_rm" type="number" step="any" placeholder="t"></div>
-    <div class="field-row"><span class="label">Safety Margin (%):</span><input class="input" id="fu_mg" type="number" step="any" value="10" placeholder="%"></div>
+    <div class="row">
+      <div class="field"><span class="field-label">HSFO ROB (t)</span><input class="num-input yellow" id="fu_rh" type="number" step="any" placeholder="t"></div>
+      <div class="field"><span class="field-label">LSFO ROB (t)</span><input class="num-input yellow" id="fu_rl" type="number" step="any" placeholder="t"></div>
+    </div>
+    <div class="row">
+      <div class="field"><span class="field-label">MGO ROB (t)</span><input class="num-input yellow" id="fu_rm" type="number" step="any" placeholder="t"></div>
+      <div class="field"><span class="field-label">Safety Margin (%)</span><input class="num-input yellow" id="fu_mg" type="number" step="any" value="10" placeholder="%"></div>
+    </div>
   </div>
 
-  <button class="calc-btn" onclick="cFuel()">CALCULATE</button>
+  <button class="calc-btn" onclick="cFuel()">🧮 CALCULATE</button>
 
-  <!-- Results -->
-  <div class="card" id="fuelResults" style="display:none">
-    <div class="section-title">Fuel Consumption Summary</div>
-    <div class="ft-wrap">
-      <div class="ft-row ft-header"><span class="ft-i">Item</span><span class="ft-v">HSFO</span><span class="ft-v">LSFO</span><span class="ft-v">MGO</span></div>
-      <div class="ft-row"><span class="ft-i">Sea Consumption</span><span class="ft-v" id="fu_sh">0</span><span class="ft-v" id="fu_sl">0</span><span class="ft-v" id="fu_sm">0</span></div>
-      <div class="ft-row"><span class="ft-i">Port Consumption</span><span class="ft-v" id="fu_ph">0</span><span class="ft-v" id="fu_pl">0</span><span class="ft-v" id="fu_pm">0</span></div>
-      <div class="ft-sep"></div>
-      <div class="ft-row ft-total"><span class="ft-i">Total Consumption</span><span class="ft-v" id="fu_th">0</span><span class="ft-v" id="fu_tl">0</span><span class="ft-v" id="fu_tm">0</span></div>
-      <div class="ft-row"><span class="ft-i">+ Safety Margin (0%)</span><span class="ft-v" id="fu_mh">0</span><span class="ft-v" id="fu_ml">0</span><span class="ft-v" id="fu_mm">0</span></div>
-      <div class="ft-row"><span class="ft-i">Safe Required</span><span class="ft-v" id="fu_sfh">0</span><span class="ft-v" id="fu_sfl">0</span><span class="ft-v" id="fu_sfm">0</span></div>
-      <div class="ft-sep"></div>
-      <div class="ft-row"><span class="ft-i">ROB</span><span class="ft-v" id="fu_rh_r">0</span><span class="ft-v" id="fu_rl_r">0</span><span class="ft-v" id="fu_rm_r">0</span></div>
-      <div class="ft-row ft-total"><span class="ft-i">Balance</span><span class="ft-v" id="fu_bh">0</span><span class="ft-v" id="fu_bl">0</span><span class="ft-v" id="fu_bm">0</span></div>
+  <!-- Results in Table Format -->
+  <div class="section result-section" id="fuelResults" style="display:none">
+    <div class="section-title">📋 Fuel Consumption Summary</div>
+    <div style="overflow-x:auto">
+      <table class="fuel-table">
+        <thead><tr><th>Item</th><th>HSFO (t)</th><th>LSFO (t)</th><th>MGO (t)</th></tr></thead>
+        <tbody>
+          <tr class="ftr-cat"><td colspan="4">Sea Consumption</td></tr>
+          <tr><td>Sea Legs Total</td><td id="fu_sh">0</td><td id="fu_sl">0</td><td id="fu_sm">0</td></tr>
+          <tr class="ftr-cat"><td colspan="4">Port Consumption</td></tr>
+          <tr><td>Port Stays Total</td><td id="fu_ph">0</td><td id="fu_pl">0</td><td id="fu_pm">0</td></tr>
+          <tr class="ftr-total"><td><strong>Total Consumption</strong></td><td id="fu_th">0</td><td id="fu_tl">0</td><td id="fu_tm">0</td></tr>
+          <tr class="ftr-cat"><td colspan="4">Safety Margin</td></tr>
+          <tr><td>+ Safety Margin (<span id="fu_mp">10</span>%)</td><td id="fu_mh">0</td><td id="fu_ml">0</td><td id="fu_mm">0</td></tr>
+          <tr class="ftr-total"><td><strong>Safe Required</strong></td><td id="fu_sfh">0</td><td id="fu_sfl">0</td><td id="fu_sfm">0</td></tr>
+          <tr class="ftr-cat"><td colspan="4">Balance Check</td></tr>
+          <tr><td>ROB on Board</td><td id="fu_rh_r">0</td><td id="fu_rl_r">0</td><td id="fu_rm_r">0</td></tr>
+          <tr class="ftr-total"><td><strong>Balance</strong></td><td id="fu_bh">0</td><td id="fu_bl">0</td><td id="fu_bm">0</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="voyage-summary">Total Distance: <span id="fu_td">0</span> nm | Sea Days: <span id="fu_sd">0</span></div>
+    <div class="result-card" style="margin-top:12px">
+      <div class="result-row"><span class="result-label">Total Distance</span><span class="result-value" id="fu_td">0</span></div>
+      <div class="result-row"><span class="result-label">Sea Days</span><span class="result-value" id="fu_sd">0</span></div>
+    </div>
   </div>
 
   <button class="reset-btn" onclick="rFuel()">↻ Reset</button>
@@ -972,8 +1115,7 @@ function cFuel(){
   $('fu_ml').textContent=ml.toFixed(2);
   $('fu_mm').textContent=mm.toFixed(2);
   // Update margin % text
-  var mgSpan=document.querySelector('#fuelResults .ft-row:nth-child(5) .ft-i');
-  if(mgSpan)mgSpan.textContent='+ Safety Margin ('+mg+'%)';
+  $('fu_mp').textContent=mg+'%';
   $('fu_sfh').textContent=sfh.toFixed(2);
   $('fu_sfl').textContent=sfl.toFixed(2);
   $('fu_sfm').textContent=sfm.toFixed(2);
